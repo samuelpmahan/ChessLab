@@ -6,9 +6,9 @@ export function boardView(record:Record):string {
  lines.push(`\nCHESSLAB / composed state ${occurrence} / ${hash.slice(0,12)}\n`);
  for(let rank=8;rank>=1;rank--){let line=rank+'  ';for(const file of 'abcdefgh'){
   const p=state.position.pieces.find(p=>p.square===file+rank);
-  const symbol=p?(p.type==='King'?'K':'Q'):'.';line+=(p?.color==='black'?symbol.toLowerCase():symbol)+' ';
+  const symbol=p?(p.type==='King'?'K':'Q')+(p.color==='white'?'w':'b'):'.';line+=symbol.padEnd(4,' ');
  }lines.push(line);}
- lines.push('   a b c d e f g h\n');
+ lines.push('   '+[...'abcdefgh'].map(file=>file.padEnd(4,' ')).join('')+'\n');
  lines.push(`${state.position.sideToMove} to move | check: ${state.check.value} | checkmate: ${state.checkmate.value} | stalemate: ${state.stalemate}`);
  lines.push('Pieces: '+state.position.pieces.map(p=>`${p.id}=${p.square}`).join('  '));
 

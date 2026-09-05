@@ -8,7 +8,7 @@ npm run demo
 npm test
 ```
 
-No npm install is needed. Uppercase pieces are White; lowercase are Black.
+No npm install is needed. Piece labels include color: Kw/Qw are White; Kb/Qb are Black.
 
 Start with White king f6, White queen g7, Black king h8; Black to move.
 
