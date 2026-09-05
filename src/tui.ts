@@ -1,3 +1,5 @@
+import {loadCartridge} from './lab/host.ts';
+import {chessCartridge} from './chess/cartridge.ts';
 import {gameReplay,replayView} from './replayView.ts';
 import {DebugMaterializer} from './lab/debugMaterializer.ts';
 import {boardView,whyView} from './views.ts';
@@ -12,11 +14,12 @@ function command(line:string){
  const [cmd,...args]=line.trim().split(/\s+/);
  if(!cmd)return;
  if(cmd==='quit'||cmd==='exit')return false;
- if(cmd==='replay'){replayMode=true;replay.seek(args.length?Number(args[0]):0);showReplay();}
+ if(cmd==='run'){const host=loadCartridge(chessCartridge);host.px.set('px.chess.frame',replay.current());const tick=host.run('S0');console.log(JSON.stringify({cartridge:'chess',tick,objects:host.px.get('px.chess.objects')},null,2));}
+ else if(cmd==='replay'){replayMode=true;replay.seek(args.length?Number(args[0]):0);showReplay();}
  else if(cmd==='next'||cmd==='back'){replayMode=true;replay[cmd]();showReplay();}
  else if(cmd==='study'){replayMode=false;show();}
  else if(cmd==='board'){if(replayMode)showReplay();else show();}
- else if(replayMode){console.log('Replay: next | back | replay 0..3 | study');}
+ else if(replayMode){console.log('Replay: next | back | replay 0..3 | run | study');}
  else if(cmd==='why')why();
  else if(cmd==='inspect'){
   const s=lab.current().state;

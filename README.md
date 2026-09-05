@@ -59,3 +59,7 @@ This is a small host seam, not yet the complete cartridge loader/stage integrati
 `npm run replay`: step through the last three turns of Deep Fritz–Kramnik (2006, game 2) with `next`, `back`, or `replay 0..3`. `study` returns to the editable K/Q specimen. `npm run sequence` prints every frame. The browser offers the same replay controls and text projection.
 
 The full published score is in `fixtures/fritz-kramnik.pgn`; four snapshots were generated and checked using python-chess 1.11.2. This is a historical replay with verified move data, not an expansion of the live King/Queen composer. All pieces stay on the board. No winning percentages are invented. Generic LAB replay navigation materializes `px.story.cursor` and `px.story.frame`; chess supplies frames and a view.
+
+## First cartridge execution
+
+In the terminal, `replay 0` then `run` loads the chess cartridge and executes S0/clean against the selected historical frame. The shared host uses ChainSpot's OperationSpec and trackAccess. `px.chess.frame` becomes `px.chess.objects`: all six piece types, position-local IDs, colors, squares and construction sources. `run` prints the actual access record and objects. No chess behavior is inferred from the labels. Cross-move identities, compiled gateway/PCR, tidy enforcement and exp selection remain unfinished integration work.
