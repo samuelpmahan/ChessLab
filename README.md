@@ -45,3 +45,11 @@ This is a position study tool, not a full chess engine: only King and Queen type
 `src/lab/board.ts` and `contract.ts` come from the supplied ChainSpot Sweep-Ready bundle, `lab/dev-pathfinding` head `60f53cd9ae8ab210dc73aa884086e315dccbe0a2`, implementation commit `9a6a69e1e5c6568fe1875faa8d303f7de4677824`. Only the board's local type-import extension was changed for native Node TypeScript execution.
 
 The existing PxC and access tracking are reused without ThreeFactor, Stage Sweep, or an engine integration. The chess model and terminal shell are new. `tidy`, stage layout, and `clean/exp/` integration remain the shared LAB-seam work; this specimen does not redefine those contracts.
+
+## DebugMaterializer
+
+Run `npm run debug` to print the composed specimen and its response trace, then exit.
+The CLI and browser use the same pure `boardView` and `whyView` projections through
+`DebugMaterializer(value, view)`. It does not recompute or mutate the supplied state.
+LAB owns this domain-neutral text boundary; the chess cartridge supplies the views.
+This is a small host seam, not yet the complete cartridge loader/stage integration.

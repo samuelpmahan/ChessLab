@@ -1,9 +1,11 @@
+import {DebugMaterializer} from './src/lab/debugMaterializer.js';
+import {boardView,whyView} from './src/views.js';
 import {Board,session,specimen} from './src/state.js';
 const lab=session(),output=document.querySelector('#output'),input=document.querySelector('#command');
 const print=s=>{output.textContent+=(output.textContent?'\n':'')+s;output.scrollTop=output.scrollHeight;};
-function render(){const {state,occurrence}=lab.current();let board='';for(let rank=8;rank>=1;rank--){board+=rank+'  ';for(const file of 'abcdefgh'){const p=state.position.pieces.find(p=>p.square===file+rank);let c=p?(p.type==='King'?'K':'Q'):'.';board+=(p?.color==='black'?c.toLowerCase():c)+' ';}board+='\n';}board+='   a b c d e f g h';document.querySelector('#board').textContent=board;document.querySelector('#status').textContent=`${state.position.sideToMove} to move · revision ${occurrence}\nCheck: ${state.check.value} · Mate: ${state.checkmate.value} · Stalemate: ${state.stalemate}`;}
+function render(){document.querySelector('#board').textContent=DebugMaterializer(lab.current(),boardView);document.querySelector('#status').textContent='';}
 function execute(line){const [cmd,...args]=line.trim().split(/\s+/);if(!cmd)return;print('> '+line);try{const s=lab.current().state;
- if(cmd==='why'){print(s.check.query+' = '+s.check.value);for(const a of s.check.has)print(`${a.source} attacks ${a.target} (${a.has.fn})`);print('All candidate responses for '+s.position.sideToMove+':');for(const r of s.checkmate.has.responses)print(`${r.piece} → ${r.to}: ${r.legal?'LEGAL':'REJECT'} — ${r.reason}${r.has.attacks?.length?' ['+r.has.attacks.map(a=>a.source+' attacks '+a.target).join(', ')+']':''}`);}
+ if(cmd==='why')print(DebugMaterializer(lab.current(),whyView));
  else if(cmd==='inspect'){const v=args[0]?s.relations.find(r=>r.piece.id===args[0]):s;if(!v)throw Error('Unknown piece ID');print(JSON.stringify(v,null,2));}
  else if(cmd==='place'){if(!s.position.pieces.some(p=>p.id===args[0]))throw Error('Unknown piece ID');lab.refine(new Board(s.position.pieces.map(p=>p.id===args[0]?{...p,square:args[1]}:p),s.position.sideToMove));print('Position recomposed. Type why to inspect.');}
  else if(cmd==='turn')lab.refine(new Board(s.position.pieces,args[0]));

@@ -1,24 +1,11 @@
+import {DebugMaterializer} from './lab/debugMaterializer.ts';
+import {boardView,whyView} from './views.ts';
 import {createInterface} from 'node:readline';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {Board,session,specimen} from './state.ts';
 const lab=session();
-function show(){
- const {state,occurrence,hash}=lab.current();
- console.log(`\nCHESSLAB / composed state ${occurrence} / ${hash.slice(0,12)}\n`);
- for(let rank=8;rank>=1;rank--){let line=rank+'  ';for(const file of 'abcdefgh'){
-  const p=state.position.pieces.find(p=>p.square===file+rank);
-  const symbol=p?(p.type==='King'?'K':'Q'):'.';line+=(p?.color==='black'?symbol.toLowerCase():symbol)+' ';
- }console.log(line);}
- console.log('   a b c d e f g h\n');
- console.log(`${state.position.sideToMove} to move | check: ${state.check.value} | checkmate: ${state.checkmate.value} | stalemate: ${state.stalemate}`);
- console.log('Pieces: '+state.position.pieces.map(p=>`${p.id}=${p.square}`).join('  '));
-}
-function why(){
- const s=lab.current().state;console.log('\n'+s.check.query+' => '+s.check.value);
- for(const a of s.check.has)console.log(`  ${a.source} attacks ${a.target}; ${a.has.fn}; intervening=[${a.has.path}]`);
- console.log('Response coverage: '+s.checkmate.has.coverage.scope);
- for(const r of s.checkmate.has.responses)console.log(`  ${r.piece} → ${r.to}: ${r.legal?'LEGAL':'REJECT'} — ${r.reason}${r.has.attacks?.length?' ('+r.has.attacks.map(a=>a.source+' attacks '+a.target).join(', ')+')':''}`);
-}
+function show(){console.log(DebugMaterializer(lab.current(),boardView));}
+function why(){console.log(DebugMaterializer(lab.current(),whyView));}
 function command(line:string){
  const [cmd,...args]=line.trim().split(/\s+/);
  if(!cmd)return;
@@ -43,7 +30,8 @@ function command(line:string){
  return true;
 }
 show();
-if(process.argv.includes('--demo')){why();console.log('\nRefinement: relocate supporting king f6 → e5');command('place WK e5');why();command('history');}
+if(process.argv.includes('--debug')){why();}
+else if(process.argv.includes('--demo')){why();console.log('\nRefinement: relocate supporting king f6 → e5');command('place WK e5');why();command('history');}
 else{
  command('help');const rl=createInterface({input:process.stdin,output:process.stdout,terminal:!!process.stdin.isTTY});rl.setPrompt('chesslab> ');rl.prompt();
  rl.on('line',line=>{try{if(command(line)===false){rl.close();return;}}catch(e){console.log('ERROR: '+(e as Error).message);}rl.prompt();});
