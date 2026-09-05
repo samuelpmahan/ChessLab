@@ -1,0 +1,14 @@
+{
+  "name": "chesslab-state",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "start": "node src/tui.ts",
+    "demo": "node src/tui.ts --demo",
+    "test": "node --test tests/*.test.ts",
+    "build": "node scripts/build.mjs"
+  }
+}
