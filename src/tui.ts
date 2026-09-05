@@ -6,7 +6,7 @@ import {boardView,whyView} from './views.ts';
 import {createInterface} from 'node:readline';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {Board,session,specimen} from './state.ts';
-const lab=session(),replay=gameReplay();let replayMode=process.argv.includes('--replay');
+const lab=session(),replay=gameReplay();let replayMode=!process.argv.includes('--debug')&&!process.argv.includes('--demo');
 const showReplay=()=>console.log(DebugMaterializer(replay,replayView));
 function show(){console.log(DebugMaterializer(lab.current(),boardView));}
 function why(){console.log(DebugMaterializer(lab.current(),whyView));}

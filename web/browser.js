@@ -1,5 +1,5 @@
 import {gameReplay,replayView} from './src/replayView.js';
-const replay=gameReplay();let replayMode=false;
+const replay=gameReplay();let replayMode=true;
 import {DebugMaterializer} from './src/lab/debugMaterializer.js';
 import {boardView,whyView} from './src/views.js';
 import {Board,session,specimen} from './src/state.js';
