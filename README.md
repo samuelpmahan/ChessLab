@@ -63,3 +63,7 @@ The full published score is in `fixtures/fritz-kramnik.pgn`; four snapshots were
 ## First cartridge execution
 
 In the terminal, `replay 0` then `run` loads the chess cartridge and executes S0/clean against the selected historical frame. The shared host uses ChainSpot's OperationSpec and trackAccess. `px.chess.frame` becomes `px.chess.objects`: all six piece types, position-local IDs, colors, squares and construction sources. `run` prints the actual access record and objects. No chess behavior is inferred from the labels. Cross-move identities, compiled gateway/PCR, tidy enforcement and exp selection remain unfinished integration work.
+
+## Publishing
+
+Pages publishes main / root. Run `npm run build` and commit `site/` plus `index.html` with source changes. The root page loads the compiled browser terminal; `.nojekyll` disables README/Jekyll rendering. CI checks tests and committed build parity. Only GitHub's branch Pages publisher deploys; there is no second competing artifact deployment. The visible short build ID fingerprints the shell and replay view, not the full source tree.
