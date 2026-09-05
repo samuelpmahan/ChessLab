@@ -1,16 +1,22 @@
+import {gameReplay,replayView} from './replayView.ts';
 import {DebugMaterializer} from './lab/debugMaterializer.ts';
 import {boardView,whyView} from './views.ts';
 import {createInterface} from 'node:readline';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {Board,session,specimen} from './state.ts';
-const lab=session();
+const lab=session(),replay=gameReplay();let replayMode=process.argv.includes('--replay');
+const showReplay=()=>console.log(DebugMaterializer(replay,replayView));
 function show(){console.log(DebugMaterializer(lab.current(),boardView));}
 function why(){console.log(DebugMaterializer(lab.current(),whyView));}
 function command(line:string){
  const [cmd,...args]=line.trim().split(/\s+/);
  if(!cmd)return;
  if(cmd==='quit'||cmd==='exit')return false;
- if(cmd==='board')show();
+ if(cmd==='replay'){replayMode=true;replay.seek(args.length?Number(args[0]):0);showReplay();}
+ else if(cmd==='next'||cmd==='back'){replayMode=true;replay[cmd]();showReplay();}
+ else if(cmd==='study'){replayMode=false;show();}
+ else if(cmd==='board'){if(replayMode)showReplay();else show();}
+ else if(replayMode){console.log('Replay: next | back | replay 0..3 | study');}
  else if(cmd==='why')why();
  else if(cmd==='inspect'){
   const s=lab.current().state;
@@ -29,8 +35,9 @@ function command(line:string){
  else console.log('board | why | inspect [WK/WQ/BK] | place ID SQUARE | turn white/black | history | receipt | reset | save FILE | load FILE | quit\nplace edits a study position, not a legal game move. Only King/Queen positions are supported.');
  return true;
 }
-show();
-if(process.argv.includes('--debug')){why();}
+if(!process.argv.includes('--sequence')){if(replayMode)showReplay();else show();}
+if(process.argv.includes('--sequence')){for(let i=0;i<replay.count;i++){replay.seek(i);showReplay();}}
+else if(process.argv.includes('--debug')){why();}
 else if(process.argv.includes('--demo')){why();console.log('\nRefinement: relocate supporting king f6 → e5');command('place WK e5');why();command('history');}
 else{
  command('help');const rl=createInterface({input:process.stdin,output:process.stdout,terminal:!!process.stdin.isTTY});rl.setPrompt('chesslab> ');rl.prompt();

@@ -1,11 +1,17 @@
+import {gameReplay,replayView} from './src/replayView.js';
+const replay=gameReplay();let replayMode=false;
 import {DebugMaterializer} from './src/lab/debugMaterializer.js';
 import {boardView,whyView} from './src/views.js';
 import {Board,session,specimen} from './src/state.js';
 const lab=session(),output=document.querySelector('#output'),input=document.querySelector('#command');
 const print=s=>{output.textContent+=(output.textContent?'\n':'')+s;output.scrollTop=output.scrollHeight;};
-function render(){document.querySelector('#board').textContent=DebugMaterializer(lab.current(),boardView);document.querySelector('#status').textContent='';}
+function render(){if(replayMode){document.querySelector('#board').textContent=DebugMaterializer(replay,replayView);return;}document.querySelector('#board').textContent=DebugMaterializer(lab.current(),boardView);document.querySelector('#status').textContent='';}
 function execute(line){const [cmd,...args]=line.trim().split(/\s+/);if(!cmd)return;print('> '+line);try{const s=lab.current().state;
- if(cmd==='why')print(DebugMaterializer(lab.current(),whyView));
+ if(cmd==='replay'){replayMode=true;replay.seek(args.length?Number(args[0]):0);}
+ else if(cmd==='next'||cmd==='back'){replayMode=true;replay[cmd]();}
+ else if(cmd==='study'){replayMode=false;}
+ else if(replayMode){print('Replay: next | back | replay 0..3 | study');}
+ else if(cmd==='why')print(DebugMaterializer(lab.current(),whyView));
  else if(cmd==='inspect'){const v=args[0]?s.relations.find(r=>r.piece.id===args[0]):s;if(!v)throw Error('Unknown piece ID');print(JSON.stringify(v,null,2));}
  else if(cmd==='place'){if(!s.position.pieces.some(p=>p.id===args[0]))throw Error('Unknown piece ID');lab.refine(new Board(s.position.pieces.map(p=>p.id===args[0]?{...p,square:args[1]}:p),s.position.sideToMove));print('Position recomposed. Type why to inspect.');}
  else if(cmd==='turn')lab.refine(new Board(s.position.pieces,args[0]));

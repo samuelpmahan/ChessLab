@@ -10,6 +10,8 @@
     "demo": "node src/tui.ts --demo",
     "test": "node --test tests/*.test.ts",
     "build": "node scripts/build.mjs",
-    "debug": "node src/tui.ts --debug"
+    "debug": "node src/tui.ts --debug",
+    "replay": "node src/tui.ts --replay",
+    "sequence": "node src/tui.ts --replay --sequence"
   }
 }

@@ -53,3 +53,9 @@ The CLI and browser use the same pure `boardView` and `whyView` projections thro
 `DebugMaterializer(value, view)`. It does not recompute or mutate the supplied state.
 LAB owns this domain-neutral text boundary; the chess cartridge supplies the views.
 This is a small host seam, not yet the complete cartridge loader/stage integration.
+
+## Famous-game replay
+
+`npm run replay`: step through the last three turns of Deep Fritz–Kramnik (2006, game 2) with `next`, `back`, or `replay 0..3`. `study` returns to the editable K/Q specimen. `npm run sequence` prints every frame. The browser offers the same replay controls and text projection.
+
+The full published score is in `fixtures/fritz-kramnik.pgn`; four snapshots were generated and checked using python-chess 1.11.2. This is a historical replay with verified move data, not an expansion of the live King/Queen composer. All pieces stay on the board. No winning percentages are invented. Generic LAB replay navigation materializes `px.story.cursor` and `px.story.frame`; chess supplies frames and a view.
