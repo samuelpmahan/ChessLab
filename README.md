@@ -1,69 +1,98 @@
-# CHESSLAB — one composed state
+# CHESSLAB — inspect both sides
 
-King, Queen, Board, attack constructions, Check, and Checkmate in a dependency-free terminal workbench. Requires Node 22.18+ (tested with Node 24.19).
+[Open the debugger](https://samuelpmahan.github.io/ChessLab/).
+Black's model sits on the left, the board in the middle, White's model on the right.
+Select a piece or candidate move to inspect its relationships and reasons. Step the
+replay to see those relationships change. The side that is not to move is explicitly
+an **if-this-side-moved-now** analysis.
+
+The panels expose a deterministic policy built for inspection. They are not the
+historical players' recovered thoughts, a Stockfish evaluation, or win probabilities.
+The policy can be wrong in an instructive, inspectable way.
+
+## Run
+
+Node 22.18+; no dependency install needed.
 
 ```sh
-npm start
-npm run demo
+npm start             # terminal replay
+npm run debug         # print the King/Queen specimen
+npm run sequence      # print the historical finish
 npm test
+npm run build
 ```
 
-No npm install is needed. Piece labels include color: Kw/Qw are White; Kb/Qb are Black.
+Terminal commands: `next`, `back`, `replay 0..3`, `mind black`, `mind white`,
+`run` (full shared debugger payload), `run exp` (experimental policy), and `study`.
+In the King/Queen study: `inspect WQ`, `why`, `place WK e5`, `turn black`,
+`history`, `receipt`, `save FILE`, `load FILE`, `reset`.
+`place` edits a position; it does not play a legal move.
 
-Start with White king f6, White queen g7, Black king h8; Black to move.
+## One LAB execution path
 
-- `why`: expand Checkmate into its checking attack and every candidate response.
-- `inspect WQ`: expand a piece's `attacks.squares.set` and `has` constructions.
-- `inspect`: print the complete composed state.
-- `place WK e5`: edit the specimen. The queen becomes capturable, so mate becomes false.
-- `turn white` / `turn black`: edit side to move (invalid positions rejected).
-- `history`: compare retained compositions and content hashes.
-- `receipt`: show occurrence, calculation address, predecessor hash, PxC reads/writes.
-- `save FILE` / `load FILE`: save JSON; loading validates and recomputes relationships.
-- `reset`, `board`, `quit`.
+Both browser and terminal call `runDebugger(frame, variant)`. Views project its
+returned values; they do not maintain another move generator or scoring engine.
 
-`place` is position editing, not playing a legal move. Refine constructors in `src/state.ts` and rerun to refine the model itself. Session history records position revisions; model revisions currently live in source/Git.
+| Stage | Reads | Writes | Calculation |
+| --- | --- | --- | --- |
+| S0: piece construction | `px.chess.frame` | `px.chess.objects` | `fn.chess.materializePieces` |
+| S1: relationships and decisions | frame + S0 objects | `px.chess.analysis` | `fn.chess.analyzeFrame` |
 
-## Composition
+`clean/` is the default; `exp/` selects alternative policy weights. Both use the
+same observations and legality. Receipts record actual accesses and called
+calculation identities. Runtime-function hashes cover that function's body, not its
+transitive dependencies; timing fields naturally vary between runs. The host is
+synchronous, with no transactional rollback or complete PCR/gateway/tidy integration.
 
-`px.chess.position` holds the Board. `fn.chess.compose` produces `px.state.chess`.
+The source substrate `src/lab/board.ts` and `contract.ts` came from ChainSpot
+Sweep-Ready (`lab/dev-pathfinding`, head `60f53cd9ae8ab210dc73aa884086e315dccbe0a2`,
+implementation `9a6a69e1e5c6568fe1875faa8d303f7de4677824`). Access tracking now also
+retains calls and registered implementations. Chess remains the domain cartridge.
 
-The proposed PxCQL expression is displayed and implemented directly:
+## What the model contains
 
-```
+- All six piece types, with position-local IDs, color, square and construction source.
+- Attack geometry, blockers, defenders, threatened pieces and checking sources.
+- Candidate moves, legal/rejected outcomes and hypothetical king-safety witnesses.
+- Deterministic score components for captures, promotion, check, mate and an
+  opponent's immediate mating reply. The score is a heuristic, not an engine score.
+- Separate position facts and policy rankings; raw data and receipts remain inspectable.
+
+An attack is not a legal move: a pinned piece can still attack a square, pawns
+attack diagonally, and kings are never capture candidates. Check corresponds to:
+
+```text
 mine.king.square IN opponent.active_pieces.attacks.squares.set
 ```
 
-There is no general PxCQL parser yet. Check retains matching attack witnesses. Each attack retains its piece, direction, intervening path, endpoint occupancy, and descriptive calculation address. King and Queen attack addresses identify direct helpers; only the aggregate `fn.chess.compose` is registered in PxC in this slice.
+There is no general PxCQL parser yet. The six-piece analysis is a small positional
+model; castling/en-passant support and history adjudication are explicitly bounded
+in its output. It does not establish historical reachability. No broad strategy or
+long search is implied by the short tactical horizon.
 
-Checkmate retains Check plus complete candidate-response coverage for the supported King/Queen domain. Each candidate retains hypothetical occupancy and attacks that reject it. Captures remove the captured piece before king safety is assessed. An enemy king is never a capture candidate. Attack geometry is independent of whether the attacking piece could legally move without exposing its own king.
+The original editable King/Queen specimen is still available under **Study**:
+White king f6, White queen g7, Black king h8, Black to move. Moving the white king
+to e5 removes its protection of the queen and opens a legal capture.
 
-This is a position study tool, not a full chess engine: only King and Queen types, exactly one king per side, no pawns/castling/en-passant/promotion or game-history adjudication. Validation rejects overlap, adjacent kings, unsupported pieces, and check on the side not to move; it does not prove historical reachability. State hashes identify JSON content, not transitive source/dependency identity. Receipts use existing access testimony but are not full PCRs.
+## Learning cases
 
-## Source provenance
+Case records retain source links, full published game scores, verified snapshots,
+and short teaching notes. The model computes its own relationships and legal
+moves; tests compare them with independently generated python-chess fixtures.
+Historical notes are distinguished from computed policy rankings.
 
-`src/lab/board.ts` and `contract.ts` come from the supplied ChainSpot Sweep-Ready bundle, `lab/dev-pathfinding` head `60f53cd9ae8ab210dc73aa884086e315dccbe0a2`, implementation commit `9a6a69e1e5c6568fe1875faa8d303f7de4677824`. Only the board's local type-import extension was changed for native Node TypeScript execution.
+The Deep Fritz–Kramnik finish demonstrates a missed mate-in-one and coordination
+between the queen and knight. It was a blunder from a defensible position, not a
+verified losing-to-winning comeback. The source score is in
+`fixtures/fritz-kramnik.pgn`.
 
-The existing PxC and access tracking are reused without ThreeFactor, Stage Sweep, or an engine integration. The chess model and terminal shell are new. `tidy`, stage layout, and `clean/exp/` integration remain the shared LAB-seam work; this specimen does not redefine those contracts.
+## Materialization and publishing
 
-## DebugMaterializer
+`DebugMaterializer(value, view)` is a pure text projection. CLI `mind` exposes the
+same debugger snapshot used by the browser. Board labels retain both type and
+color (`Kw`, `Kb`, `Nw`), while browser selections highlight relationships.
 
-Run `npm run debug` to print the composed specimen and its response trace, then exit.
-The CLI and browser use the same pure `boardView` and `whyView` projections through
-`DebugMaterializer(value, view)`. It does not recompute or mutate the supplied state.
-LAB owns this domain-neutral text boundary; the chess cartridge supplies the views.
-This is a small host seam, not yet the complete cartridge loader/stage integration.
-
-## Famous-game replay
-
-`npm run replay`: step through the last three turns of Deep Fritz–Kramnik (2006, game 2) with `next`, `back`, or `replay 0..3`. `study` returns to the editable K/Q specimen. `npm run sequence` prints every frame. The browser offers the same replay controls and text projection.
-
-The full published score is in `fixtures/fritz-kramnik.pgn`; four snapshots were generated and checked using python-chess 1.11.2. This is a historical replay with verified move data, not an expansion of the live King/Queen composer. All pieces stay on the board. No winning percentages are invented. Generic LAB replay navigation materializes `px.story.cursor` and `px.story.frame`; chess supplies frames and a view.
-
-## First cartridge execution
-
-In the terminal, `replay 0` then `run` loads the chess cartridge and executes S0/clean against the selected historical frame. The shared host uses ChainSpot's OperationSpec and trackAccess. `px.chess.frame` becomes `px.chess.objects`: all six piece types, position-local IDs, colors, squares and construction sources. `run` prints the actual access record and objects. No chess behavior is inferred from the labels. Cross-move identities, compiled gateway/PCR, tidy enforcement and exp selection remain unfinished integration work.
-
-## Publishing
-
-Pages publishes main / root. Run `npm run build` and commit `site/` plus `index.html` with source changes. The root page loads the compiled browser terminal; `.nojekyll` disables README/Jekyll rendering. CI checks tests and committed build parity. Only GitHub's branch Pages publisher deploys; there is no second competing artifact deployment. The visible short build ID fingerprints the shell and replay view, not the full source tree.
+Pages publishes `main` / root. Run `npm run build` and commit `site/` and
+`index.html` with source changes. The build fingerprints all compiled model/view
+inputs and versions module URLs, including domain-only edits. CI checks tests
+and generated-output parity. GitHub's branch Pages publisher is the only deployer.

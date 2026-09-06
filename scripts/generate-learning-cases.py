@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+"""Generate the Opera Game learning-case frames from its PGN.
+
+Requires python-chess 1.11.2 (or a compatible python-chess release). The
+selected snapshots are the position before Qb8+, then the three finishing
+plies. Legal moves, check status, and full FEN metadata come directly from
+python-chess. The debugger may report castling as omitted, but the source FEN
+is never altered.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+import chess
+import chess.pgn
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_PGN = ROOT / "fixtures" / "opera-game.pgn"
+DEFAULT_OUTPUT = ROOT / "src" / "learningCases.ts"
+SOURCE = "https://en.chessbase.com/post/50-games-paul-morphy-simple-powerful-strong"
+SECONDARY_SOURCE = "https://www.chess.com/terms/opera-game-chess"
+TAIL = ["Qb8+", "Nxb8", "Rd8#"]
+
+
+def source_fen(board: chess.Board) -> str:
+    return board.fen()
+
+
+def pieces(board: chess.Board) -> list[dict[str, str]]:
+    result = []
+    for square, piece in sorted(board.piece_map().items()):
+        color = "w" if piece.color == chess.WHITE else "b"
+        result.append({"square": chess.square_name(square), "label": piece.symbol().upper() + color})
+    return result
+
+
+def change(board_before: chess.Board, move: chess.Move, san: str) -> dict[str, object]:
+    captured = board_before.piece_at(move.to_square)
+    return {
+        "san": san,
+        "source": chess.square_name(move.from_square),
+        "target": chess.square_name(move.to_square),
+        "capture": captured.symbol().lower() if captured else None,
+        "before": source_fen(board_before),
+    }
+
+
+def frame(board: chess.Board, title: str, note: str, prior: tuple[chess.Board, chess.Move, str] | None) -> dict[str, object]:
+    return {
+        "title": title,
+        "note": note,
+        "fen": source_fen(board),
+        "pieces": pieces(board),
+        "sideToMove": "white" if board.turn == chess.WHITE else "black",
+        "check": board.is_check(),
+        "checkmate": board.is_checkmate(),
+        "legalMoves": [move.uci() for move in board.legal_moves],
+        "change": change(*prior) if prior else None,
+    }
+
+
+def generate(pgn_path: Path) -> dict[str, object]:
+    with pgn_path.open(encoding="utf-8") as handle:
+        game = chess.pgn.read_game(handle)
+    if game is None:
+        raise SystemExit(f"No game found in {pgn_path}")
+
+    board = game.board()
+    snapshots: list[tuple[chess.Board, chess.Move | None, str | None]] = [(board.copy(), None, None)]
+    for move in game.mainline_moves():
+        san = board.san(move)
+        board_before = board.copy()
+        board.push(move)
+        snapshots.append((board.copy(), move, san))
+
+    sans = [san for _, _, san in snapshots if san is not None]
+    if sans[-3:] != TAIL:
+        raise SystemExit(f"Unexpected Opera Game tail: {sans[-3:]!r}")
+    start = len(snapshots) - 4
+    selected = snapshots[start:]
+
+    titles = [
+        "Before the finish · Qb8+ is ready",
+        "White queen: b3 → b8; CHECK",
+        "Black knight: d7 × b8; forced reply",
+        "White rook: d1 → d8 across the eighth rank; CHECKMATE",
+    ]
+    notes = [
+        "White's queen can check on b8. The point is deflection: Black's knight must take on b8, leaving the d-file for the rook.",
+        "Qb8+ forces Nxb8. The knight is deflected onto b8, while the bishop on g5 helps control the king's escape squares.",
+        "The queen has been exchanged for the knight's forced detour. The d-file is open for the rook, coordinated with the bishop on g5.",
+        "Rd8# is mate: the rook checks across the eighth rank while the bishop on g5 controls escape squares. The queen sacrifice completed the deflection.",
+    ]
+    frames = []
+    for index, (snapshot, move, san) in enumerate(selected):
+        prior = None
+        if index > 0:
+            previous_board = selected[index - 1][0]
+            assert move is not None and san is not None
+            prior = (previous_board, move, san)
+        frames.append(frame(snapshot, titles[index], notes[index], prior))
+
+    return {
+        "id": "opera-game-1858",
+        "title": "Paul Morphy vs Duke Karl II of Brunswick and Count Isouard · 1858 · Opera Game",
+        "source": SOURCE,
+        "secondarySource": SECONDARY_SOURCE,
+        "verification": "Full PGN replayed with python-chess 1.11.2; selected legal moves, check status, checkmate, and full FEN metadata are generated from the replay. The debugger reports castling as omitted from its supported move scope without altering the source FEN.",
+        "frames": frames,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pgn", type=Path, default=DEFAULT_PGN)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    opera = generate(args.pgn)
+    text = "// Generated by scripts/generate-learning-cases.py; do not hand-edit.\n"
+    text += "import {famousGame} from './famousGame.ts';\n\n"
+    text += "export const operaGame = " + json.dumps(opera, indent=2, ensure_ascii=False) + " as const;\n\n"
+    text += "export const learningCases = [famousGame,operaGame] as const;\n"
+    args.output.write_text(text, encoding="utf-8")
+    print(f"wrote {args.output}")
+
+
+if __name__ == "__main__":
+    main()

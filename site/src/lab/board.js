@@ -7,20 +7,20 @@
 // masks', 'assignment.scoredPairs', ...) in one store. Browser-safe: no
 // I/O, no node built-ins.
 
-                                                                              
 
-                           
-	                          
-	                     
- 
 
-                                     
-	                                 
-	                       
-	                           
- 
 
-                                                                 
+
+
+
+
+
+
+
+
+
+
+
 
 export function pxKey   (address         )           {
 	return Object.freeze({ address });
@@ -39,15 +39,15 @@ function addressOf(slot                          )          {
  * name because this is the existing production board evolving in place, not
  * a second synchronized store.
  */
-                      
-	                                    
-	                                             
-	                                                 
-	                                                                                             
-	                                                               
- 
 
-                            
+
+
+
+
+
+
+
+
 
 export function createExecBoard()      {
 	const slots = new Map                  ();
@@ -86,16 +86,22 @@ export function createExecBoard()      {
  */
 export function trackAccess(
 	board     ,
-	tick                                        
-)   
-	             
-	                       
-	                       
-	                           
+	tick
+)
+
+
+
+
+
+
+
+
   {
 	const consumed = new Set         ();
 	const produced = new Set         ();
 	const writes                     = [];
+	const registered = new Map                                                 ();
+	const called = new Set                ();
 	const declaredConsumes = new Set(tick.consumes);
 	const tracked      = {
 		get   (slot                    )    {
@@ -127,8 +133,14 @@ export function trackAccess(
 			});
 			board.set(slot, value);
 		},
-		register: (fn, calculate) => board.register(fn, calculate),
-		call: (fn, args) => board.call(fn, args)
+		register: (fn, calculate) => {
+			registered.set(fn.address, calculate                                   );
+			board.register(fn, calculate);
+		},
+		call: (fn, args) => {
+			called.add(fn.address);
+			return board.call(fn, args);
+		}
 	};
-	return { tracked, consumed, produced, writes };
+	return { tracked, consumed, produced, writes, registered, called };
 }

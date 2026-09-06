@@ -92,10 +92,16 @@ export function trackAccess(
 	consumed: Set<SlotRef>;
 	produced: Set<SlotRef>;
 	writes: PxWriteTestimony[];
+	/** Calculations actually registered by this Tick, keyed by their fn.* address. */
+	registered: Map<`fn.${string}`, PxCalculation<unknown, unknown>>;
+	/** fn.* addresses actually called by this Tick. */
+	called: Set<`fn.${string}`>;
 } {
 	const consumed = new Set<SlotRef>();
 	const produced = new Set<SlotRef>();
 	const writes: PxWriteTestimony[] = [];
+	const registered = new Map<`fn.${string}`, PxCalculation<unknown, unknown>>();
+	const called = new Set<`fn.${string}`>();
 	const declaredConsumes = new Set(tick.consumes);
 	const tracked: PxC = {
 		get<T>(slot: SlotRef | PxKey<T>): T {
@@ -127,8 +133,14 @@ export function trackAccess(
 			});
 			board.set(slot, value);
 		},
-		register: (fn, calculate) => board.register(fn, calculate),
-		call: (fn, args) => board.call(fn, args)
+		register: (fn, calculate) => {
+			registered.set(fn.address, calculate as PxCalculation<unknown, unknown>);
+			board.register(fn, calculate);
+		},
+		call: (fn, args) => {
+			called.add(fn.address);
+			return board.call(fn, args);
+		}
 	};
-	return { tracked, consumed, produced, writes };
+	return { tracked, consumed, produced, writes, registered, called };
 }

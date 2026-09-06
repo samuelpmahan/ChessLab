@@ -1,8 +1,11 @@
-                                                  
-import {pxFn} from '../../../../lab/board.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
+
+import {pxFn} from '../../../../lab/board.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
 const names={K:'King',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'}         ;
-                                                                                           
-function materialize(frame      ){
+/** A fully observed board fixture. It is intentionally policy-free. */
+
+
+
+function materialize(frame      )                    {
  const pieces=frame.pieces.map(p=>{
   const type=names[p.label[0]                      ];
   if(!type||!['w','b'].includes(p.label[1]))throw Error('Unknown piece label: '+p.label);
@@ -12,4 +15,5 @@ function materialize(frame      ){
  return {pieces,sideToMove:frame.sideToMove,has:{source:'px.chess.frame',fen:frame.fen},identityScope:'position-local; cross-move identity not yet assigned'};
 }
 export const calculate=pxFn                                      ('fn.chess.materializePieces');
+/** S0's one real materialization calculation. Policy lives in analysis, never here. */
 export function execute(px    ){px.register(calculate,materialize);px.set('px.chess.objects',px.call(calculate,px.get       ('px.chess.frame')));}

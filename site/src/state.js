@@ -1,7 +1,7 @@
-import {createExecBoard, pxFn, pxKey, trackAccess} from './lab/board.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
-import {sha256HexSyncText} from './lab/sha256.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
-                                    
-                                                                              
+import {createExecBoard, pxFn, pxKey, trackAccess} from './lab/board.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+import {sha256HexSyncText} from './lab/sha256.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+
+
 export const King=(id       ,color      ,square       )      =>({id,type:'King',color,square});
 export const Queen=(id       ,color      ,square       )      =>({id,type:'Queen',color,square});
 export const other=(color      )      =>color==='white'?'black':'white';
@@ -22,7 +22,7 @@ export class Board {
  }
  at(s       ){return this.pieces.find(p=>p.square===s);}
 }
-                                                                                                                                  
+
 export function attacks(board      ,piece      )         {
  const [x,y]=xy(piece.square),out         =[];
  for(const [dx,dy] of directions){const path         =[];

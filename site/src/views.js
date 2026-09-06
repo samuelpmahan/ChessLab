@@ -1,5 +1,5 @@
-                                        
-                                                                
+
+
 export function boardView(record       )        {
  const lines         =[];
  const {state,occurrence,hash}=record;
