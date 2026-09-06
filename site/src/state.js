@@ -1,5 +1,5 @@
-import {createExecBoard, pxFn, pxKey, trackAccess} from './lab/board.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
-import {sha256HexSyncText} from './lab/sha256.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {createExecBoard, pxFn, pxKey, trackAccess} from './lab/board.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {sha256HexSyncText} from './lab/sha256.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
 
 
 export const King=(id       ,color      ,square       )      =>({id,type:'King',color,square});

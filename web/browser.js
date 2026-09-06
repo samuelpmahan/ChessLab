@@ -1,3 +1,4 @@
+import {renderBoardStory} from './boardStory.js';
 import {famousGame} from './src/famousGame.js';
 import {learningCases} from './src/learningCases.js';
 import {prepareStudyFrame, moveStudyPiece, turnStudyFrame, studyPieceMatches} from './src/chess/study.js';
@@ -92,6 +93,7 @@ function updateSelection() {
     }
   });
   renderSelection(document.querySelector('#selection-readout'), selected, entry.snapshot);
+  requestAnimationFrame(paintStory);
 }
 function render() {
   const entry = ensureCurrent();
@@ -116,6 +118,7 @@ function render() {
     }
   });
   renderSelection(document.querySelector('#selection-readout'), selected, entry.snapshot);
+  requestAnimationFrame(paintStory);
   const analysis = modelAnalysis(entry.snapshot, entry.frame);
   document.querySelector('#analysis-title').textContent = analysis.title;
   document.querySelector('#analysis-note').textContent = analysis.note || 'No model analysis note reported.';
@@ -254,12 +257,18 @@ try {
   if (typeof saved.fit === 'boolean') prefs.fit = saved.fit;
   if (Number.isFinite(saved.size)) prefs.size = Math.max(11, Math.min(22, saved.size));
 } catch {}
+function paintStory(){
+ if(!current.result)return;
+ const focus={...selected,nextMove:replayMode?replayFrames[replayIndex+1]?.change:null};
+ renderBoardStory(boardGrid,current.snapshot,current.frame,focus);
+}
 function fitBoard() {
   const box = document.querySelector('#viewport');
-  if (!box || !prefs.fit) { document.documentElement.style.setProperty('--board-size', ''); boardGrid.style.width = ''; return; }
+  if (!box || !prefs.fit) { document.documentElement.style.setProperty('--board-size', ''); boardGrid.style.width = ''; requestAnimationFrame(paintStory); return; }
   const size = Math.max(80, Math.min(box.clientWidth - 20, box.clientHeight - 20));
   document.documentElement.style.setProperty('--board-size', `${size}px`);
   boardGrid.style.width = `${size}px`;
+  requestAnimationFrame(paintStory);
 }
 function applyPrefs() {
   policyVariant = prefs.policy === 'exp' ? 'exp' : 'clean';

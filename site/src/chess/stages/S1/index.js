@@ -1,6 +1,6 @@
 
-import {pxFn} from '../../../lab/board.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
-import {analyzePosition} from '../../analysis.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {pxFn} from '../../../lab/board.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {analyzePosition} from '../../analysis.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
 
 
 

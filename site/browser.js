@@ -1,12 +1,13 @@
-import {famousGame} from './src/famousGame.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
-import {learningCases} from './src/learningCases.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
-import {prepareStudyFrame, moveStudyPiece, turnStudyFrame, studyPieceMatches} from './src/chess/study.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
-import {runDebugger} from './src/chess/debugger.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {renderBoardStory} from './boardStory.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {famousGame} from './src/famousGame.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {learningCases} from './src/learningCases.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {prepareStudyFrame, moveStudyPiece, turnStudyFrame, studyPieceMatches} from './src/chess/study.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {runDebugger} from './src/chess/debugger.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
 import {
   snapshotOf, ticksOf, frameOf, piecesOf, pieceLabel, pieceSquare, sideOf,
   candidateRelation, renderSide, renderBoard, renderRaw, modelAnalysis,
   snapshotSummary, renderSelection
-} from './debuggerView.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+} from './debuggerView.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
 
 const availableCases = Array.isArray(learningCases) && learningCases.length ? learningCases : [famousGame];
 let activeCase = availableCases.find(item => item.id === famousGame.id) ?? availableCases[0];
@@ -92,6 +93,7 @@ function updateSelection() {
     }
   });
   renderSelection(document.querySelector('#selection-readout'), selected, entry.snapshot);
+  requestAnimationFrame(paintStory);
 }
 function render() {
   const entry = ensureCurrent();
@@ -116,6 +118,7 @@ function render() {
     }
   });
   renderSelection(document.querySelector('#selection-readout'), selected, entry.snapshot);
+  requestAnimationFrame(paintStory);
   const analysis = modelAnalysis(entry.snapshot, entry.frame);
   document.querySelector('#analysis-title').textContent = analysis.title;
   document.querySelector('#analysis-note').textContent = analysis.note || 'No model analysis note reported.';
@@ -254,12 +257,18 @@ try {
   if (typeof saved.fit === 'boolean') prefs.fit = saved.fit;
   if (Number.isFinite(saved.size)) prefs.size = Math.max(11, Math.min(22, saved.size));
 } catch {}
+function paintStory(){
+ if(!current.result)return;
+ const focus={...selected,nextMove:replayMode?replayFrames[replayIndex+1]?.change:null};
+ renderBoardStory(boardGrid,current.snapshot,current.frame,focus);
+}
 function fitBoard() {
   const box = document.querySelector('#viewport');
-  if (!box || !prefs.fit) { document.documentElement.style.setProperty('--board-size', ''); boardGrid.style.width = ''; return; }
+  if (!box || !prefs.fit) { document.documentElement.style.setProperty('--board-size', ''); boardGrid.style.width = ''; requestAnimationFrame(paintStory); return; }
   const size = Math.max(80, Math.min(box.clientWidth - 20, box.clientHeight - 20));
   document.documentElement.style.setProperty('--board-size', `${size}px`);
   boardGrid.style.width = `${size}px`;
+  requestAnimationFrame(paintStory);
 }
 function applyPrefs() {
   policyVariant = prefs.policy === 'exp' ? 'exp' : 'clean';
