@@ -1,0 +1,74 @@
+{
+  "schema": "chesslab-arena@1",
+  "gameId": "terra-full",
+  "revision": 6,
+  "createdAt": "2026-09-06T02:47:55.618Z",
+  "initialFen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16",
+  "fen": "1Q3b1r/p2k1ppp/4q3/4p1B1/4P3/8/PPP2PPP/2K5 w - - 4 19",
+  "moves": [
+    {
+      "ply": 1,
+      "seat": "white",
+      "uci": "d1d7",
+      "san": "Rxd7",
+      "rationale": "Rxd7 removes the key defender; if Black recaptures with Qxd7, Qb8+ creates a decisive back-rank attack with the bishop controlling d8.",
+      "at": "2026-09-06T02:49:02.539Z"
+    },
+    {
+      "ply": 2,
+      "seat": "black",
+      "uci": "e8d7",
+      "san": "Kxd7",
+      "rationale": "Kxd7 removes White’s advanced rook for free. The king can safely recapture on d7, preserving Black’s queen and eliminating White’s only active invasion; Qxb3 merely trades queens after axb3.",
+      "at": "2026-09-06T02:49:51.128Z"
+    },
+    {
+      "ply": 3,
+      "seat": "white",
+      "uci": "b3b7",
+      "san": "Qb7+",
+      "rationale": "Qb7+ keeps the black king exposed and is harder to neutralize than diagonal checks: it covers c8 and c6, while the bishop denies e7 and d8, forcing the king into a narrow set of squares.",
+      "at": "2026-09-06T02:50:43.492Z"
+    },
+    {
+      "ply": 4,
+      "seat": "black",
+      "uci": "d7e8",
+      "san": "Ke8",
+      "rationale": "Ke8 steps out of the queen’s seventh-rank check while retaining the coordinated queen, bishop, and rook. It keeps the king sheltered behind the e-file and avoids the exposed central route on d6; Black remains materially decisive.",
+      "at": "2026-09-06T02:51:13.865Z"
+    },
+    {
+      "ply": 5,
+      "seat": "white",
+      "uci": "b7b8",
+      "san": "Qb8+",
+      "rationale": "Qb8+ renews the back-rank attack. The bishop controls d8 and e7; any queen interposition on c8 can be captured with check, leaving Black unable to trade queens.",
+      "at": "2026-09-06T02:54:01.547Z"
+    },
+    {
+      "ply": 6,
+      "seat": "black",
+      "uci": "e8d7",
+      "san": "Kd7",
+      "rationale": "Kd7 is the only safe reply to Qb8+: it leaves the queen’s eighth-rank line and avoids Qc8, which permits an immediate mating reply. Black keeps a major material advantage after escaping the check.",
+      "at": "2026-09-06T02:54:23.684Z"
+    }
+  ],
+  "players": {
+    "white": "terra",
+    "black": "terra"
+  },
+  "config": {
+    "maxPlies": 6,
+    "maxEngineCalls": 0,
+    "maxEngineConcurrency": 1,
+    "visibility": "full"
+  },
+  "engineCalls": 0,
+  "engineInFlight": 0,
+  "result": {
+    "kind": "unfinished",
+    "reason": "ply-cap"
+  }
+}

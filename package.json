@@ -12,6 +12,13 @@
     "build": "node scripts/build.mjs",
     "debug": "node src/tui.ts --debug",
     "replay": "node src/tui.ts --replay",
-    "sequence": "node src/tui.ts --replay --sequence"
+    "sequence": "node src/tui.ts --replay --sequence",
+    "engine:install": "node scripts/install-engine.mjs",
+    "engine": "node src/engine/cli.ts",
+    "arena": "node scripts/arena.mjs",
+    "arena:smoke": "node scripts/arena-smoke.mjs"
+  },
+  "dependencies": {
+    "chess.js": "1.4.0"
   }
 }

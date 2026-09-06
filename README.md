@@ -12,15 +12,21 @@ The policy can be wrong in an instructive, inspectable way.
 
 ## Run
 
-Node 22.18+; no dependency install needed.
+Node 22.18+. Install the pinned CLI rules dependency before running the arena or tests.
 
 ```sh
+npm ci
 npm start             # terminal replay
 npm run debug         # print the King/Queen specimen
 npm run sequence      # print the historical finish
 npm test
 npm run build
 ```
+
+The [CLI arena](docs/ARENA.md) accepts agent move submissions, validates full
+legal play with chess.js, and retains turn records. Stockfish is an optional
+external player/analysis producer for that CLI. The browser debugger's existing
+bounded analysis remains unchanged by engine installation.
 
 Terminal commands: `next`, `back`, `replay 0..3`, `mind black`, `mind white`,
 `run` (full shared debugger payload), `run exp` (experimental policy), and `study`.
@@ -99,3 +105,21 @@ Pages publishes `main` / root. Run `npm run build` and commit `site/` and
 `index.html` with source changes. The build fingerprints all compiled model/view
 inputs and versions module URLs, including domain-only edits. CI checks tests
 and generated-output parity. GitHub's branch Pages publisher is the only deployer.
+
+## Optional engine analysis
+
+Install the pinned Stockfish 18 Lite Single runtime into the ignored local cache, then
+ask it to analyze a FEN. The engine stays a Node CLI process; it is not bundled into
+the browser debugger.
+
+```sh
+npm run engine:install
+npm run engine -- --fen "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 3" --movetime 800 --multipv 2
+```
+
+`analyze(fen, moves, options)` accepts the **initial** FEN and complete UCI move
+history, validates both with chess.js, starts one bounded UCI process, and returns a
+request-scoped completed analysis. `STOCKFISH_PATH=/path/to/stockfish` selects a native
+engine instead; `--engine` selects a command explicitly. Completed engine output is
+then recorded as imported material by the synchronous `chess.materializeEngineAnalysis`
+PxC Tick.

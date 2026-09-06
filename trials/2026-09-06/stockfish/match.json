@@ -1,0 +1,213 @@
+{
+  "schema": "chesslab-arena@1",
+  "gameId": "stockfish-forced-finish",
+  "revision": 3,
+  "createdAt": "2026-09-06T02:52:27.225Z",
+  "initialFen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16",
+  "fen": "1n1Rkb1r/p4ppp/4q3/4p1B1/4P3/8/PPP2PPP/2K5 b k - 1 17",
+  "moves": [
+    {
+      "ply": 1,
+      "seat": "white",
+      "uci": "b3b8",
+      "san": "Qb8+",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T02:52:27.566Z"
+    },
+    {
+      "ply": 2,
+      "seat": "black",
+      "uci": "d7b8",
+      "san": "Nxb8",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T02:52:27.873Z"
+    },
+    {
+      "ply": 3,
+      "seat": "white",
+      "uci": "d1d8",
+      "san": "Rd8#",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T02:52:28.183Z"
+    }
+  ],
+  "players": {
+    "white": "engine",
+    "black": "engine"
+  },
+  "config": {
+    "maxPlies": 6,
+    "maxEngineCalls": 6,
+    "maxEngineConcurrency": 1,
+    "visibility": "blind"
+  },
+  "engineCalls": 3,
+  "engineInFlight": 0,
+  "engineAnalysis": {
+    "revision": 2,
+    "fen": "1n2kb1r/p4ppp/4q3/4p1B1/4P3/8/PPP2PPP/2KR4 w k - 0 17",
+    "analysis": {
+      "schema": "chesslab-engine-analysis@1",
+      "requestId": "1398ba80-2556-4734-b168-d42f7cd4adb4",
+      "position": {
+        "fen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16",
+        "moves": [
+          "b3b8",
+          "d7b8"
+        ],
+        "command": "position fen 4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16 moves b3b8 d7b8"
+      },
+      "settings": {
+        "threads": 1,
+        "hashMb": 32,
+        "multiPv": 1,
+        "limit": {
+          "kind": "nodes",
+          "value": 20000
+        },
+        "timeoutMs": 5000
+      },
+      "engine": {
+        "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "arguments": [
+          "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+        ],
+        "name": "Stockfish 18 Lite WASM",
+        "author": "the Stockfish developers (see AUTHORS file)",
+        "protocol": "uci"
+      },
+      "bestmove": "d1d8",
+      "ponder": null,
+      "variations": [
+        {
+          "multipv": 1,
+          "depth": 245,
+          "seldepth": 2,
+          "score": {
+            "kind": "mate",
+            "value": 1,
+            "bound": "exact"
+          },
+          "wdl": {
+            "win": 1000,
+            "draw": 0,
+            "loss": 0
+          },
+          "nodes": 8085,
+          "nps": 310961,
+          "pv": [
+            "d1d8"
+          ]
+        }
+      ],
+      "startedAtMs": 1788663147879,
+      "completedAtMs": 1788663148180,
+      "durationMs": 301
+    },
+    "materialization": {
+      "materialization": {
+        "schema": "chesslab-engine-materialization@1",
+        "requestId": "1398ba80-2556-4734-b168-d42f7cd4adb4",
+        "analysis": {
+          "schema": "chesslab-engine-analysis@1",
+          "requestId": "1398ba80-2556-4734-b168-d42f7cd4adb4",
+          "position": {
+            "fen": "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16",
+            "moves": [
+              "b3b8",
+              "d7b8"
+            ],
+            "command": "position fen 4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16 moves b3b8 d7b8"
+          },
+          "settings": {
+            "threads": 1,
+            "hashMb": 32,
+            "multiPv": 1,
+            "limit": {
+              "kind": "nodes",
+              "value": 20000
+            },
+            "timeoutMs": 5000
+          },
+          "engine": {
+            "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "arguments": [
+              "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+            ],
+            "name": "Stockfish 18 Lite WASM",
+            "author": "the Stockfish developers (see AUTHORS file)",
+            "protocol": "uci"
+          },
+          "bestmove": "d1d8",
+          "ponder": null,
+          "variations": [
+            {
+              "multipv": 1,
+              "depth": 245,
+              "seldepth": 2,
+              "score": {
+                "kind": "mate",
+                "value": 1,
+                "bound": "exact"
+              },
+              "wdl": {
+                "win": 1000,
+                "draw": 0,
+                "loss": 0
+              },
+              "nodes": 8085,
+              "nps": 310961,
+              "pv": [
+                "d1d8"
+              ]
+            }
+          ],
+          "startedAtMs": 1788663147879,
+          "completedAtMs": 1788663148180,
+          "durationMs": 301
+        }
+      },
+      "tick": {
+        "stage": "materialize",
+        "variant": "completed",
+        "operation": "chess.materializeEngineAnalysis",
+        "opId": "chess.materializeEngineAnalysis",
+        "frozenCalculations": [
+          {
+            "address": "fn.chess.materializeEngineAnalysis",
+            "implementationHash": "a74a3fa5ecd4aa6cfa3db2573296dedbe435f8a86d9a66eda4758b3cf588165f",
+            "identityScope": "runtime-function-body",
+            "limitation": "called helpers, constants, templates, and assets are not covered"
+          }
+        ],
+        "startedAtMs": 1788663148181,
+        "durationMs": 0,
+        "declaredConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "declaredProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "actualConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "actualProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "writes": [
+          {
+            "address": "px.chess.engine.analysis",
+            "kind": "new-address"
+          }
+        ],
+        "probes": [],
+        "artifacts": []
+      }
+    }
+  },
+  "result": {
+    "kind": "win",
+    "reason": "checkmate",
+    "winner": "white"
+  }
+}

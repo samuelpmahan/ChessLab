@@ -1,13 +1,13 @@
-import {renderBoardStory} from './boardStory.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
-import {famousGame} from './src/famousGame.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
-import {learningCases} from './src/learningCases.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
-import {prepareStudyFrame, moveStudyPiece, turnStudyFrame, studyPieceMatches} from './src/chess/study.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
-import {runDebugger} from './src/chess/debugger.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {renderBoardStory} from './boardStory.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
+import {famousGame} from './src/famousGame.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
+import {learningCases} from './src/learningCases.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
+import {prepareStudyFrame, moveStudyPiece, turnStudyFrame, studyPieceMatches} from './src/chess/study.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
+import {runDebugger} from './src/chess/debugger.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
 import {
   snapshotOf, ticksOf, frameOf, piecesOf, pieceLabel, pieceSquare, sideOf,
   candidateRelation, renderSide, renderBoard, renderRaw, modelAnalysis,
   snapshotSummary, renderSelection
-} from './debuggerView.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+} from './debuggerView.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
 
 const availableCases = Array.isArray(learningCases) && learningCases.length ? learningCases : [famousGame];
 let activeCase = availableCases.find(item => item.id === famousGame.id) ?? availableCases[0];

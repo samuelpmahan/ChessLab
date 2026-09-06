@@ -9,7 +9,10 @@ function files(dir) {
 }
 // Every domain, view and build input participates, so model-only changes also
 // invalidate cached modules. No timestamps or git metadata in generated output.
-const sources = files('src').filter(path=>path.endsWith('.ts') && path!=='src/tui.ts');
+// Process adapters and arena persistence run in Node; the browser cartridge
+// shares domain materials, not filesystem or subprocess implementations.
+const sources = files('src').filter(path=>path.endsWith('.ts') && path!=='src/tui.ts'
+  && !path.startsWith('src/engine/') && !path.startsWith('src/arena/'));
 const web = files('web');
 const hash = createHash('sha256');
 for (const path of [...sources,...web,'scripts/build.mjs']) hash.update(path+'\0').update(readFileSync(path)).update('\0');

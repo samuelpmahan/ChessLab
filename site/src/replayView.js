@@ -1,5 +1,5 @@
-import {famousGame} from './famousGame.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
-import {createReplay} from './lab/replay.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {famousGame} from './famousGame.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
+import {createReplay} from './lab/replay.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
 export const gameReplay=()=>createReplay(famousGame.frames);
 export function replayView(replay                              )        {
  const f=replay.current(),width=58,lines         =[];

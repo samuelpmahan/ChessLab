@@ -1,4 +1,4 @@
-import {boardStory} from './src/chess/boardStory.js?v=39bcfefb661b1c4e536ad75dac14d6b55666cbddf86d9d219da356a444d0894d';
+import {boardStory} from './src/chess/boardStory.js?v=1659bc36bb2d5fb65e10d55219bcabfc2d6f753a947bc503323c54cfb194a081';
 const NS='http://www.w3.org/2000/svg';
 const colors={move:'#ffd080',preview:'#d2b6ff',check:'#ff846d',support:'#70d5ff'};
 function svg(tag,attrs={}){const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));return el;}

@@ -1,0 +1,11 @@
+[Event "ChessLab Arena"]
+[Site "local"]
+[Date "2026.09.06"]
+[Round "terra-blind"]
+[White "terra"]
+[Black "terra"]
+[Result "1-0"]
+[SetUp "1"]
+[FEN "4kb1r/p2n1ppp/4q3/4p1B1/4P3/1Q6/PPP2PPP/2KR4 w k - 0 16"]
+
+16. Qb7 Qxa2 17. Qc8# 1-0
