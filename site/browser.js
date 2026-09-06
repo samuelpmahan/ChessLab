@@ -1,3 +1,5 @@
+import {loadCartridge} from './src/lab/host.js';
+import {chessCartridge} from './src/chess/cartridge.js';
 import {gameReplay,replayView} from './src/replayView.js';
 const replay=gameReplay();let replayMode=true;
 import {DebugMaterializer} from './src/lab/debugMaterializer.js';
@@ -5,9 +7,18 @@ import {boardView,whyView} from './src/views.js';
 import {Board,session,specimen} from './src/state.js';
 const lab=session(),output=document.querySelector('#output'),input=document.querySelector('#command');
 const print=s=>{output.textContent+=(output.textContent?'\n':'')+s;output.scrollTop=output.scrollHeight;};
-function render(){if(replayMode){document.querySelector('#board').textContent=DebugMaterializer(replay,replayView);return;}document.querySelector('#board').textContent=DebugMaterializer(lab.current(),boardView);document.querySelector('#status').textContent='';}
+function render(){
+ document.querySelector('#board').textContent=replayMode?DebugMaterializer(replay,replayView):DebugMaterializer(lab.current(),boardView);
+ document.querySelector('#mode-label').textContent=replayMode?'REPLAY':'STUDY';
+ document.querySelector('#status').textContent=replayMode?`Frame ${replay.index()} / ${replay.count-1} · ${replay.current().title}`:'King + Queen study · place edits the position';
+ for(const b of document.querySelectorAll('[data-command]')){const c=b.dataset.command;b.disabled=(c==='back'&&replayMode&&replay.index()===0)||(c==='next'&&replayMode&&replay.index()===replay.count-1)||(replayMode&&['inspect WQ','place WK e5','save','load'].includes(c));}
+ requestAnimationFrame(fitBoard);
+}
 function execute(line){const [cmd,...args]=line.trim().split(/\s+/);if(!cmd)return;print('> '+line);try{const s=lab.current().state;
- if(cmd==='replay'){replayMode=true;replay.seek(args.length?Number(args[0]):0);}
+ if(cmd==='clear')output.textContent='';
+ else if(cmd==='run'){const host=loadCartridge(chessCartridge);host.px.set('px.chess.frame',replay.current());const tick=host.run('S0');print(JSON.stringify({tick,objects:host.px.get('px.chess.objects')},null,2));}
+ else if(cmd==='why'&&replayMode)print(replay.current().title+'\n'+replay.current().note);
+ else if(cmd==='replay'){replayMode=true;replay.seek(args.length?Number(args[0]):0);}
  else if(cmd==='next'||cmd==='back'){replayMode=true;replay[cmd]();}
  else if(cmd==='study'){replayMode=false;}
  else if(replayMode){print('Replay: next | back | replay 0..3 | study');}
@@ -27,4 +38,12 @@ function execute(line){const [cmd,...args]=line.trim().split(/\s+/);if(!cmd)retu
 document.querySelector('#form').addEventListener('submit',e=>{e.preventDefault();execute(input.value);input.value='';});
 for(const b of document.querySelectorAll('[data-command]'))b.addEventListener('click',()=>execute(b.dataset.command));
 document.querySelector('#upload').addEventListener('change',async e=>{try{const f=e.target.files[0];if(!f)return;const s=JSON.parse(await f.text());if(s.schema!=='chesslab-state@1')throw Error('Unsupported schema');lab.refine(new Board(s.position.pieces,s.position.sideToMove));render();print('Loaded and recomposed state.');}catch(err){print('ERROR: '+err.message);}finally{e.target.value='';}});
-render();print('Open a composition. Change a part. See what follows.');execute('why');
+const defaults={layout:'split',theme:'green',fit:true,size:14};let prefs={...defaults};
+try{const saved=JSON.parse(localStorage.getItem('chesslab.display')||'{}');if(['split','stack','board'].includes(saved.layout))prefs.layout=saved.layout;if(['green','amber','ice'].includes(saved.theme))prefs.theme=saved.theme;if(typeof saved.fit==='boolean')prefs.fit=saved.fit;if(Number.isFinite(saved.size))prefs.size=Math.max(11,Math.min(22,saved.size));}catch{}
+function fitBoard(){const el=document.querySelector('#board'),box=document.querySelector('#viewport');if(!prefs.fit){el.style.fontSize=prefs.size+'px';return;}const rows=el.textContent.split('\n'),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');ctx.font='100px '+getComputedStyle(el).fontFamily;const maxWidth=Math.max(...rows.map(r=>ctx.measureText(r).width))/100;el.style.fontSize=Math.max(5,Math.min(24,(box.clientWidth-24)/maxWidth,(box.clientHeight-24)/(rows.length*1.25)))+'px';}
+function applyPrefs(){document.body.dataset.layout=prefs.layout;document.body.dataset.theme=prefs.theme;document.documentElement.style.setProperty('--size',prefs.size+'px');document.querySelector('#layout-choice').value=prefs.layout;document.querySelector('#theme-choice').value=prefs.theme;document.querySelector('#fit').checked=prefs.fit;document.querySelector('#text-size').value=prefs.size;document.querySelector('#size-label').value=prefs.size;try{localStorage.setItem('chesslab.display',JSON.stringify(prefs));}catch{}requestAnimationFrame(fitBoard);}
+for(const [id,key] of [['layout-choice','layout'],['theme-choice','theme'],['fit','fit'],['text-size','size']])document.getElementById(id).addEventListener('input',e=>{prefs[key]=key==='fit'?e.target.checked:key==='size'?Number(e.target.value):e.target.value;applyPrefs();});
+document.querySelector('#defaults').addEventListener('click',()=>{prefs={...defaults};applyPrefs();});
+new ResizeObserver(fitBoard).observe(document.querySelector('#viewport'));
+document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement.tagName)||e.metaKey||e.ctrlKey||e.altKey)return;if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();execute(e.key==='ArrowRight'?'next':'back');}if(e.key==='/'){e.preventDefault();if(prefs.layout==='board'){prefs.layout='split';applyPrefs();}input.focus();}});
+applyPrefs();render();print('Select Next to follow the finish. Explain shows the current move.');
