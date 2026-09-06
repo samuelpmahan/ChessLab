@@ -1,12 +1,12 @@
-import {famousGame} from './src/famousGame.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
-import {learningCases} from './src/learningCases.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
-import {prepareStudyFrame, moveStudyPiece, turnStudyFrame, studyPieceMatches} from './src/chess/study.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
-import {runDebugger} from './src/chess/debugger.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+import {famousGame} from './src/famousGame.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {learningCases} from './src/learningCases.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {prepareStudyFrame, moveStudyPiece, turnStudyFrame, studyPieceMatches} from './src/chess/study.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {runDebugger} from './src/chess/debugger.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
 import {
   snapshotOf, ticksOf, frameOf, piecesOf, pieceLabel, pieceSquare, sideOf,
   candidateRelation, renderSide, renderBoard, renderRaw, modelAnalysis,
   snapshotSummary, renderSelection
-} from './debuggerView.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+} from './debuggerView.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
 
 const availableCases = Array.isArray(learningCases) && learningCases.length ? learningCases : [famousGame];
 let activeCase = availableCases.find(item => item.id === famousGame.id) ?? availableCases[0];
@@ -70,7 +70,8 @@ function printJson(value) {
 }
 function analysisText(entry) {
   const analysis = modelAnalysis(entry.snapshot, entry.frame);
-  return `${analysis.title}\n${analysis.note || 'No model analysis note reported.'}`;
+  const side=entry.snapshot.sides[entry.snapshot.sideToMove];
+  return `${analysis.title}\n${snapshotSummary(entry.snapshot,entry.frame)}\n${side.checkWitnesses.map(w=>`${w.sourcePiece.type} on ${w.sourcePiece.square} attacks the king on ${w.target}`).join('\n')}\n${side.legalMoves.length} legal options.\n${side.legalMoves.slice(0,3).map(c=>`${c.from} → ${c.to}: ${c.score.explanation.join('; ')} (score ${c.score.total})`).join('\n')}`;
 }
 function selectedRelationForCandidate(candidate) {
   const relation = candidateRelation(candidate);
@@ -94,6 +95,7 @@ function updateSelection() {
 }
 function render() {
   const entry = ensureCurrent();
+  if(selected.candidate) selected.candidate = entry.snapshot.sides[selected.candidate.side].candidates.find(c=>c.id===selected.candidate.id) ?? null;
   const pieces = piecesOf(entry.snapshot, entry.frame);
   renderSide(document.querySelector('#black-panel'), 'black', entry.snapshot, pieces, {
     onCandidate: candidate => { selected.relation = selectedRelationForCandidate(candidate); selected.relations = selected.relation ? [selected.relation] : []; selected.candidate = candidate; selected.piece = null; selected.pieceRelation = null; updateSelection(); }
@@ -117,6 +119,7 @@ function render() {
   const analysis = modelAnalysis(entry.snapshot, entry.frame);
   document.querySelector('#analysis-title').textContent = analysis.title;
   document.querySelector('#analysis-note').textContent = analysis.note || 'No model analysis note reported.';
+  const sourceLink=document.querySelector('#case-source');sourceLink.hidden=!replayMode;sourceLink.href=activeCase.source;
   document.querySelector('#mode-label').textContent = replayMode ? 'REPLAY' : 'STUDY';
   const frameCount = replayFrames.length;
   document.querySelector('#status').textContent = replayMode

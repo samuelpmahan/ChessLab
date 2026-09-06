@@ -1,4 +1,4 @@
-import {createExecBoard,pxKey} from './board.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+import {createExecBoard,pxKey} from './board.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
 /** Navigation changes the viewed frame; it never reruns or edits the experiment. */
 export function createReplay   (frames             ) {
  if(!frames.length)throw Error('Replay needs at least one frame');

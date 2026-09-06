@@ -84,7 +84,10 @@ Historical notes are distinguished from computed policy rankings.
 The Deep Fritz–Kramnik finish demonstrates a missed mate-in-one and coordination
 between the queen and knight. It was a blunder from a defensible position, not a
 verified losing-to-winning comeback. The source score is in
-`fixtures/fritz-kramnik.pgn`.
+`fixtures/fritz-kramnik.pgn`. The Opera Game case follows `Qb8+ Nxb8 Rd8#`,
+showing deflection and rook/bishop coordination. Regenerate its snapshots with
+`python scripts/generate-learning-cases.py` (requires python-chess). Source FEN
+metadata, including retained castling rights, is preserved.
 
 ## Materialization and publishing
 

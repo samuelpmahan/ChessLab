@@ -1,7 +1,7 @@
-import {chessCartridge} from './cartridge.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+import {chessCartridge} from './cartridge.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
 
 
-import {loadCartridge} from '../lab/host.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+import {loadCartridge} from '../lab/host.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
 
 
 

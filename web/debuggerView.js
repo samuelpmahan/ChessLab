@@ -196,7 +196,7 @@ function policyLines(policy) {
 function formatThreat(threat) {
   const li = document.createElement('li');
   if (threat?.piece?.square && Array.isArray(threat?.attackerSources)) {
-    const attackers = threat.attackerSources.map(source => `${source.source} → ${source.target}`).join(', ');
+    const attackers = threat.attackerSources.map(source => `${pieceLabel(source.sourcePiece)} ${source.sourcePiece.square} → ${source.target}`).join(', ');
     li.textContent = `${threat.piece.square} threatened${attackers ? ` · ${attackers}` : ''}`;
     return li;
   }
@@ -225,7 +225,7 @@ export function renderSide(container, color, snapshot, pieces, {onCandidate} = {
   title.textContent = `${color.toUpperCase()} / ${active ? 'TO MOVE' : 'IF MOVING NOW'}`;
   container.append(title);
   const status = side.checkmate ? 'CHECKMATE — no legal escape' : side.inCheck ? 'CHECK — king must be protected' : side.stalemate ? 'STALEMATE — no legal move, no check' : 'King is not in check';
-  container.append(block('Position',line(`${status} · ${side.legalMoves.length} legal options${side.moveSetComplete ? '' : ' (partial rules)'}`)));
+  container.append(block('Position',line(`${status} · ${side.legalMoves.length} legal option${side.legalMoves.length===1?'':'s'}${side.moveSetComplete ? '' : ' (partial rules)'}`)));
   const own = document.createElement('p'); own.className='piece-inventory';
   own.textContent = side.pieces.map(p=>`${pieceLabel(p)} ${p.square}`).join(' · ');
   const inventory = block(`Material: ${side.materialPoints / 100} points · kings excluded`,own);
@@ -375,8 +375,8 @@ export function renderSelection(container, selection, snapshot) {
       const witness = document.createElement('span');
       witness.textContent = `Replies / witnesses: ${witnesses.map(item => {
         const sources = item.checkingSources ?? [];
-        const evidence = sources.length ? sources.map(source => `${source.source ?? '?'}→${source.target ?? '?'}`).join(', ') : `${item.source ?? '?'}→${item.target ?? '?'}`;
-        return `${item.reply ? `${item.reply}: ` : ''}${evidence}`;
+        const evidence = sources.length ? sources.map(source => `${source.sourcePiece?.type ?? 'Piece'} ${source.sourcePiece?.square ?? source.source} attacks ${source.target}`).join(', ') : `${item.sourcePiece?.type ?? 'Piece'} ${item.sourcePiece?.square ?? item.source} attacks ${item.target}`;
+        return `${item.reply ? `${item.reply.slice(0,2)} → ${item.reply.slice(2,4)}: ` : ''}${evidence}`;
       }).join('; ')}`;
       container.append(document.createElement('br'), witness);
     }

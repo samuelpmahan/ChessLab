@@ -21,17 +21,17 @@ main{min-height:0;grid-template-rows:auto auto minmax(0,1fr) auto auto}
 </head>
 <body>
 <main>
-<header><h1>CHESSLAB_</h1><a id="revision" href="https://github.com/samuelpmahan/ChessLab">f68a489</a></header>
+<header><h1>CHESSLAB_</h1><a id="revision" href="https://github.com/samuelpmahan/ChessLab">c3676fb</a></header>
 <div id="settings" aria-label="Display settings"><label>Case <select id="case-choice" aria-label="Learning case"></select></label><label>Policy <select id="policy-choice" aria-label="Policy variant"><option value="clean">Clean</option><option value="exp">Experimental</option></select></label><label>Layout <select id="layout-choice"><option value="split">Three columns</option><option value="board">Board focus</option><option value="stack">Stacked</option></select></label><label>Palette <select id="theme-choice"><option value="green">Phosphor</option><option value="amber">Amber</option><option value="ice">Ice</option></select></label><label><input id="fit" type="checkbox" checked>Fit board</label><label>Text <input id="text-size" type="range" min="11" max="22" value="14"><output id="size-label">14</output></label><button id="defaults">Reset display</button></div>
 <div id="layout">
 <section id="black-panel" class="side-panel" aria-label="Black analysis"></section>
-<section id="world" aria-label="Board"><div class="panel-title">02 / BOARD <span id="mode-label">REPLAY</span></div><div id="viewport"><div id="board-grid" role="grid" aria-label="Chess board"></div></div><div id="board-caption"><strong>CASE NOTE</strong> · <span id="analysis-title"></span><br><span id="analysis-note"></span><div id="selection-readout" class="selection-readout"></div><div id="provenance"></div></div><div id="status" aria-live="polite"></div></section>
+<section id="world" aria-label="Board"><div class="panel-title">02 / BOARD <span id="mode-label">REPLAY</span></div><div id="viewport"><div id="board-grid" role="grid" aria-label="Chess board"></div></div><div id="board-caption"><strong>CASE NOTE</strong> <a id="case-source" target="_blank" rel="noopener">source ↗</a> · <span id="analysis-title"></span><br><span id="analysis-note"></span><div id="selection-readout" class="selection-readout"></div><div id="provenance"></div></div><div id="status" aria-live="polite"></div></section>
 <section id="white-panel" class="side-panel" aria-label="White analysis"></section>
 </div>
 <section id="console"><div class="panel-title">04 / TERMINAL <button data-command="clear">Clear</button></div><pre id="output" role="log" aria-live="polite"></pre><form id="form"><label for="command">&gt;</label><input id="command" aria-label="Terminal command" autocomplete="off" spellcheck="false" placeholder="why / run / inspect"><button>Run</button></form><nav><button data-command="why">Explain</button><button data-command="run">Objects</button><button data-command="inspect WQ">Queen</button><button data-command="place WK e5">Expose escape</button><button data-command="save">Save</button><button data-command="load">Load</button></nav></section>
 <footer><button id="terminal-toggle" aria-expanded="false">Terminal / objects</button><button data-command="replay">Restart replay</button><button data-command="back">← Back</button><button data-command="next">Next →</button><button data-command="study">Study</button><span>← → replay · / command · w White / b Black</span></footer>
 </main>
 <input type="file" id="upload" accept=".json,application/json" hidden>
-<script type="module" src="./site/browser.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d"></script>
+<script type="module" src="./site/browser.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc"></script>
 </body>
 </html>

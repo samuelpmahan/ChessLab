@@ -1,8 +1,8 @@
 
-import {execute} from './stages/S0/clean/index.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
-import {execute as executeExp} from './stages/S0/exp/index.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
-import {execute as analyze} from './stages/S1/clean/index.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
-import {execute as analyzeExp} from './stages/S1/exp/index.js?v=f68a48966d9f8e520c928607c280c59642e818ed1fc31dcbdef5371866e0bb8d';
+import {execute} from './stages/S0/clean/index.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {execute as executeExp} from './stages/S0/exp/index.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {execute as analyze} from './stages/S1/clean/index.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
+import {execute as analyzeExp} from './stages/S1/exp/index.js?v=c3676fb15de8ce7ded90f50ef42e2b99558273a8658873b3a5146afa1e1a70dc';
 const materializeOperation={kind:'materialize'         ,gate:'always',unit:'chess.S0',consumes:['px.chess.frame'],produces:['px.chess.objects'],calculations:['fn.chess.materializePieces']         ,accessConformance:'exact'         };
 /**
  * Both variants execute the same evidence materialization. `exp` is only a

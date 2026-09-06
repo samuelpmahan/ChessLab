@@ -70,7 +70,8 @@ function printJson(value) {
 }
 function analysisText(entry) {
   const analysis = modelAnalysis(entry.snapshot, entry.frame);
-  return `${analysis.title}\n${analysis.note || 'No model analysis note reported.'}`;
+  const side=entry.snapshot.sides[entry.snapshot.sideToMove];
+  return `${analysis.title}\n${snapshotSummary(entry.snapshot,entry.frame)}\n${side.checkWitnesses.map(w=>`${w.sourcePiece.type} on ${w.sourcePiece.square} attacks the king on ${w.target}`).join('\n')}\n${side.legalMoves.length} legal options.\n${side.legalMoves.slice(0,3).map(c=>`${c.from} → ${c.to}: ${c.score.explanation.join('; ')} (score ${c.score.total})`).join('\n')}`;
 }
 function selectedRelationForCandidate(candidate) {
   const relation = candidateRelation(candidate);
@@ -94,6 +95,7 @@ function updateSelection() {
 }
 function render() {
   const entry = ensureCurrent();
+  if(selected.candidate) selected.candidate = entry.snapshot.sides[selected.candidate.side].candidates.find(c=>c.id===selected.candidate.id) ?? null;
   const pieces = piecesOf(entry.snapshot, entry.frame);
   renderSide(document.querySelector('#black-panel'), 'black', entry.snapshot, pieces, {
     onCandidate: candidate => { selected.relation = selectedRelationForCandidate(candidate); selected.relations = selected.relation ? [selected.relation] : []; selected.candidate = candidate; selected.piece = null; selected.pieceRelation = null; updateSelection(); }
@@ -117,6 +119,7 @@ function render() {
   const analysis = modelAnalysis(entry.snapshot, entry.frame);
   document.querySelector('#analysis-title').textContent = analysis.title;
   document.querySelector('#analysis-note').textContent = analysis.note || 'No model analysis note reported.';
+  const sourceLink=document.querySelector('#case-source');sourceLink.hidden=!replayMode;sourceLink.href=activeCase.source;
   document.querySelector('#mode-label').textContent = replayMode ? 'REPLAY' : 'STUDY';
   const frameCount = replayFrames.length;
   document.querySelector('#status').textContent = replayMode
