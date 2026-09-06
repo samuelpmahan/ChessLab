@@ -1,0 +1,11 @@
+[Event "ChessLab Arena"]
+[Site "local"]
+[Date "2026.09.06"]
+[Round "xhigh-repair"]
+[White "terra"]
+[Black "engine"]
+[Result "*"]
+[SetUp "1"]
+[FEN "5Nk1/6p1/q6p/4P3/pQ6/8/1P4PP/2b4K w - - 1 36"]
+
+36. Qc4+ Qxc4 *

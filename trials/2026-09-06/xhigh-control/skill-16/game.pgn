@@ -1,0 +1,11 @@
+[Event "ChessLab Arena"]
+[Site "local"]
+[Date "2026.09.06"]
+[Round "control-skill-16"]
+[White "engine"]
+[Black "engine"]
+[Result "*"]
+[SetUp "1"]
+[FEN "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34"]
+
+34. Nxf8 Kg8 35. Ng6 Qe3 36. Qd5+ Kh7 *

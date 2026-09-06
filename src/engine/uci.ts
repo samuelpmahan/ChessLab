@@ -19,6 +19,8 @@ export type AnalyzeOptions = Readonly<{
   /** Uses `go nodes N` when present, with the wall-clock timeout still enforced. */
   nodes?: number;
   multiPv?: number;
+  /** Stockfish UCI Skill Level from 0 (weakest) through 20 (strongest). Defaults to 20. */
+  skillLevel?: number;
   threads?: number;
   hashMb?: number;
   timeoutMs?: number;
@@ -122,13 +124,14 @@ export async function analyze(fen: string, moves: readonly string[] = [], option
   const movetimeMs = integer(options.movetimeMs, DEFAULT_MOVETIME_MS, 'movetimeMs', 1, MAX_MOVETIME_MS);
   const nodes = options.nodes === undefined ? null : integer(options.nodes, 1, 'nodes', 1, MAX_NODES);
   const multiPv = integer(options.multiPv, 1, 'multiPv', 1, 8);
+  const skillLevel = integer(options.skillLevel, 20, 'skillLevel', 0, 20);
   const threads = integer(options.threads, 1, 'threads', 1, 4);
   const hashMb = integer(options.hashMb, 32, 'hashMb', 1, 256);
   const timeoutMs = integer(options.timeoutMs, Math.min(MAX_TIMEOUT_MS, movetimeMs + 2_000), 'timeoutMs', 50, MAX_TIMEOUT_MS);
   const defaultCommand = defaultEngineCommand();
   const enginePath = options.enginePath ?? defaultCommand.command;
   const engineArgs = options.engineArgs ?? (options.enginePath ? [] : defaultCommand.args);
-  const settings: EngineSettings = { threads, hashMb, multiPv, limit: nodes === null ? { kind: 'movetime', value: movetimeMs } : { kind: 'nodes', value: nodes }, timeoutMs };
+  const settings: EngineSettings = { threads, hashMb, multiPv, skillLevel, limit: nodes === null ? { kind: 'movetime', value: movetimeMs } : { kind: 'nodes', value: nodes }, timeoutMs };
   const requestId = options.requestId ?? randomUUID();
   const positionCommand = `position fen ${fen.trim()}${legalMoves.length ? ` moves ${legalMoves.join(' ')}` : ''}`;
   const startedAtMs = Date.now();
@@ -176,6 +179,7 @@ export async function analyze(fen: string, moves: readonly string[] = [], option
         send(`setoption name Threads value ${threads}`);
         send(`setoption name Hash value ${hashMb}`);
         send(`setoption name MultiPV value ${multiPv}`);
+        send(`setoption name Skill Level value ${skillLevel}`);
         send('setoption name UCI_ShowWDL value true');
         send('isready');
       } else if (line === 'readyok' && phase === 'ready-config') {

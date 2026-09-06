@@ -1,0 +1,215 @@
+{
+  "schema": "chesslab-arena@1",
+  "gameId": "control-skill-0",
+  "revision": 3,
+  "createdAt": "2026-09-06T03:02:55.300Z",
+  "initialFen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+  "fen": "5N1k/6pQ/7p/4P3/pp6/8/1P3qPP/2b4K b - - 2 35",
+  "moves": [
+    {
+      "ply": 1,
+      "seat": "white",
+      "uci": "e6f8",
+      "san": "Nxf8",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:55.632Z"
+    },
+    {
+      "ply": 2,
+      "seat": "black",
+      "uci": "a7f2",
+      "san": "Qf2",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:55.947Z"
+    },
+    {
+      "ply": 3,
+      "seat": "white",
+      "uci": "e4h7",
+      "san": "Qh7#",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:56.288Z"
+    }
+  ],
+  "players": {
+    "white": "engine",
+    "black": "engine"
+  },
+  "config": {
+    "maxPlies": 6,
+    "maxEngineCalls": 6,
+    "maxEngineConcurrency": 1,
+    "visibility": "blind"
+  },
+  "engineCalls": 3,
+  "engineInFlight": 0,
+  "engineAnalysis": {
+    "revision": 2,
+    "fen": "5N1k/6p1/7p/4P3/pp2Q3/8/1P3qPP/2b4K w - - 1 35",
+    "analysis": {
+      "schema": "chesslab-engine-analysis@1",
+      "requestId": "5bbcec31-2c50-4f59-8d1f-01f4b80f3e20",
+      "position": {
+        "fen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+        "moves": [
+          "e6f8",
+          "a7f2"
+        ],
+        "command": "position fen 5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34 moves e6f8 a7f2"
+      },
+      "settings": {
+        "threads": 1,
+        "hashMb": 32,
+        "multiPv": 1,
+        "skillLevel": 20,
+        "limit": {
+          "kind": "nodes",
+          "value": 20000
+        },
+        "timeoutMs": 5000
+      },
+      "engine": {
+        "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "arguments": [
+          "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+        ],
+        "name": "Stockfish 18 Lite WASM",
+        "author": "the Stockfish developers (see AUTHORS file)",
+        "protocol": "uci"
+      },
+      "bestmove": "e4h7",
+      "ponder": null,
+      "variations": [
+        {
+          "multipv": 1,
+          "depth": 245,
+          "seldepth": 2,
+          "score": {
+            "kind": "mate",
+            "value": 1,
+            "bound": "exact"
+          },
+          "wdl": {
+            "win": 1000,
+            "draw": 0,
+            "loss": 0
+          },
+          "nodes": 7359,
+          "nps": 319956,
+          "pv": [
+            "e4h7"
+          ]
+        }
+      ],
+      "startedAtMs": 1788663775956,
+      "completedAtMs": 1788663776285,
+      "durationMs": 329
+    },
+    "materialization": {
+      "materialization": {
+        "schema": "chesslab-engine-materialization@1",
+        "requestId": "5bbcec31-2c50-4f59-8d1f-01f4b80f3e20",
+        "analysis": {
+          "schema": "chesslab-engine-analysis@1",
+          "requestId": "5bbcec31-2c50-4f59-8d1f-01f4b80f3e20",
+          "position": {
+            "fen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+            "moves": [
+              "e6f8",
+              "a7f2"
+            ],
+            "command": "position fen 5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34 moves e6f8 a7f2"
+          },
+          "settings": {
+            "threads": 1,
+            "hashMb": 32,
+            "multiPv": 1,
+            "skillLevel": 20,
+            "limit": {
+              "kind": "nodes",
+              "value": 20000
+            },
+            "timeoutMs": 5000
+          },
+          "engine": {
+            "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "arguments": [
+              "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+            ],
+            "name": "Stockfish 18 Lite WASM",
+            "author": "the Stockfish developers (see AUTHORS file)",
+            "protocol": "uci"
+          },
+          "bestmove": "e4h7",
+          "ponder": null,
+          "variations": [
+            {
+              "multipv": 1,
+              "depth": 245,
+              "seldepth": 2,
+              "score": {
+                "kind": "mate",
+                "value": 1,
+                "bound": "exact"
+              },
+              "wdl": {
+                "win": 1000,
+                "draw": 0,
+                "loss": 0
+              },
+              "nodes": 7359,
+              "nps": 319956,
+              "pv": [
+                "e4h7"
+              ]
+            }
+          ],
+          "startedAtMs": 1788663775956,
+          "completedAtMs": 1788663776285,
+          "durationMs": 329
+        }
+      },
+      "tick": {
+        "stage": "materialize",
+        "variant": "completed",
+        "operation": "chess.materializeEngineAnalysis",
+        "opId": "chess.materializeEngineAnalysis",
+        "frozenCalculations": [
+          {
+            "address": "fn.chess.materializeEngineAnalysis",
+            "implementationHash": "a74a3fa5ecd4aa6cfa3db2573296dedbe435f8a86d9a66eda4758b3cf588165f",
+            "identityScope": "runtime-function-body",
+            "limitation": "called helpers, constants, templates, and assets are not covered"
+          }
+        ],
+        "startedAtMs": 1788663776285,
+        "durationMs": 0,
+        "declaredConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "declaredProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "actualConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "actualProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "writes": [
+          {
+            "address": "px.chess.engine.analysis",
+            "kind": "new-address"
+          }
+        ],
+        "probes": [],
+        "artifacts": []
+      }
+    }
+  },
+  "result": {
+    "kind": "win",
+    "reason": "checkmate",
+    "winner": "white"
+  }
+}

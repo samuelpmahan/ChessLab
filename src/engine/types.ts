@@ -28,6 +28,8 @@ export interface EngineSettings {
   readonly threads: number;
   readonly hashMb: number;
   readonly multiPv: number;
+  /** Stockfish UCI Skill Level, where 20 is strongest. */
+  readonly skillLevel: number;
   readonly limit: Readonly<{ readonly kind: 'movetime' | 'nodes'; readonly value: number }>;
   readonly timeoutMs: number;
 }

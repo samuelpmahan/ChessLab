@@ -1,0 +1,11 @@
+[Event "ChessLab Arena"]
+[Site "local"]
+[Date "2026.09.06"]
+[Round "xhigh-skill-8"]
+[White "terra"]
+[Black "engine"]
+[Result "0-1"]
+[SetUp "1"]
+[FEN "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34"]
+
+34. Nxf8 Kg8 35. Qxb4 Qa6 36. Qe7 Qf1# 0-1

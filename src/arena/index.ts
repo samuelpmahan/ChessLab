@@ -95,20 +95,22 @@ const analysisTypes:Record<string,PieceType>={k:'King',q:'Queen',r:'Rook',b:'Bis
 function materializeArenaMind(chess:Chess){
  const pieces=chess.board().flat().filter((piece): piece is NonNullable<typeof piece>=>piece!==null).map(piece=>({square:piece.square,type:analysisTypes[piece.type],color:piece.color==='w'?'white':'black'} satisfies AnalysisPiece));
  const side=colorSeat(chess.turn()),analysis=analyzePosition({fen:chess.fen(),pieces,sideToMove:side});
- const candidates=analysis.activeSide.legalMoves.slice(0,5),candidateAddresses=candidates.map((_candidate,index)=>`arena.candidate.${index}`);
+ const preferred=analysis.activeSide.legalMoves.slice(0,5);
+ const risks=analysis.activeSide.legalMoves.filter(candidate=>candidate.score?.opponentMateWitnesses.length);
+ const candidates=[...new Map([...preferred,...risks].map(candidate=>[candidate.id,candidate])).values()],candidateAddresses=candidates.map((_candidate,index)=>`arena.candidate.${index}`);
  const cartridge={id:'arena-mind',stages:[{id:'materialize',variant:'current',operation:{id:'arena.materializeMind',kind:'materialize',gate:'always',unit:'chess.arena',consumes:['arena.analysis','arena.side',...candidateAddresses],produces:['arena.mind'],calculations:Object.values(chessConstraintPredicates),accessConformance:'exact' as const},execute(px:PxC){
   const localAnalysis=px.get<typeof analysis>('arena.analysis'),localSide=px.get<typeof side>('arena.side');registerChessConstraintPredicates(px);
   const constraints=[kingInCheckConstraint({id:'arena.king-check',analysis:'arena.analysis',side:'arena.side'}),checkingWitnessConstraint({id:'arena.check-witness',analysis:'arena.analysis',side:'arena.side'}),...candidateAddresses.flatMap((address,index)=>[candidateLegalConstraint({id:`arena.candidate.${index}.legal`,candidate:address}),avoidsImmediateReplyMateConstraint({id:`arena.candidate.${index}.reply-mate`,candidate:address})])];
   const evaluations=constraints.map(constraint=>{const result=evaluateConstraint(px,constraint);return {id:constraint.id,...result};});
-  px.set('arena.mind',{summary:{side:localSide,fen:localAnalysis.fen,limitations:localAnalysis.limitations,candidates:localAnalysis.policy.rankedMoves[localSide].slice(0,5),checkWitnesses:localAnalysis.sides[localSide].checkWitnesses,attacks:localAnalysis.sides[localSide].relations.slice(0,20),constraintEvaluations:evaluations},analysis:localAnalysis,evaluations});
+  px.set('arena.mind',{summary:{side:localSide,fen:localAnalysis.fen,immediateMateRisks:localAnalysis.activeSide.legalMoves.filter(candidate=>candidate.score?.opponentMateWitnesses.length).map(candidate=>({move:candidate.id,replies:candidate.score!.opponentMateWitnesses})),limitations:localAnalysis.limitations,candidates:localAnalysis.policy.rankedMoves[localSide].slice(0,5),checkWitnesses:localAnalysis.sides[localSide].checkWitnesses,attacks:localAnalysis.sides[localSide].relations.slice(0,20),constraintEvaluations:evaluations},analysis:localAnalysis,evaluations});
  }}]};
  const host=loadCartridge(cartridge);host.px.set('arena.analysis',analysis);host.px.set('arena.side',side);candidates.forEach((candidate,index)=>host.px.set(candidateAddresses[index],candidate));const tick=host.run('materialize','current');
  return {materialization:host.px.get<unknown>('arena.mind'),tick};
 }
-function compactSource(value:any){return {source:value.source,target:value.target,kind:value.kind,relation:value.relation,path:value.path,occupiedBy:value.occupiedBy??null};}
+function compactSource(value:any){return {source:value.source,from:value.sourcePiece?.square,piece:value.sourcePiece?.type,side:value.sourcePiece?.color,target:value.target,kind:value.kind,relation:value.relation,path:value.path,occupiedBy:value.occupiedBy??null};}
 function compactMind(directory:string,revision:number,detailed:any){
  const raw=detailed.materialization.summary, attacks=(raw.attacks??[]).flatMap((relation:any)=>relation.attacks??[relation]).slice(0,20).map(compactSource);
- return {summary:{side:raw.side,fen:raw.fen?.raw??null,limitations:raw.limitations,candidates:raw.candidates.map((candidate:any)=>({id:candidate.id,total:candidate.total,components:candidate.components,explanation:candidate.explanation})),checkWitnesses:(raw.checkWitnesses??[]).map(compactSource),attacks,constraintEvaluations:raw.constraintEvaluations.map(({id,status,reason}:any)=>({id,status,reason}))},tick:detailed.tick,archive:{path:archiveMind(directory,revision,detailed),revision}};
+ return {summary:{side:raw.side,fen:raw.fen?.raw??null,immediateMateRisks:(raw.immediateMateRisks??[]).map((risk:any)=>({move:risk.move,replies:risk.replies.map((reply:any)=>({move:reply.reply,checkingSources:reply.checkingSources.map(compactSource)}))})),limitations:raw.limitations,candidates:raw.candidates.map((candidate:any)=>({id:candidate.id,total:candidate.total,components:candidate.components,explanation:candidate.explanation})),checkWitnesses:(raw.checkWitnesses??[]).map(compactSource),attacks,constraintEvaluations:raw.constraintEvaluations.map(({id,status,reason}:any)=>({id,status,reason}))},tick:detailed.tick,archive:{path:archiveMind(directory,revision,detailed),revision}};
 }
 /** Carefully whitelisted observation output. Blind observations contain only public board facts and move history; they never contain rationales, players, engine analysis, or domain judgments. */
 export function observe(directory:string,seat:Seat){
@@ -152,7 +154,7 @@ function acquireEngine(directory:string, slots:number){
  const base=resolve(directory);for(let slot=0;slot<slots;slot++){const lock=join(base,slot===0?'.engine.lock':`.engine.${slot}.lock`);try{const fd=openSync(lock,'wx');return ()=>{closeSync(fd);rmSync(lock,{force:true});};}catch{ /* try another bounded slot */ }}fail('Engine concurrency limit reached; retry later');
 }
 /** Reserves one budgeted engine search before work begins. Failed searches still consume that attempt. */
-export async function engineTurn(directory:string, options:{enginePath?:string;engineArgs?:readonly string[];movetimeMs?:number;nodes?:number;timeoutMs?:number}={}){
+export async function engineTurn(directory:string, options:{enginePath?:string;engineArgs?:readonly string[];movetimeMs?:number;nodes?:number;skillLevel?:number;timeoutMs?:number}={}){
  const initial=loadMatch(directory), current=status(directory);
  if(current.result)return {accepted:false,outcome:'game-over'};
  if(current.player!=='engine')return {accepted:false,outcome:'awaiting-non-engine-player'};

@@ -1,0 +1,244 @@
+{
+  "schema": "chesslab-arena@1",
+  "gameId": "control-skill-8",
+  "revision": 6,
+  "createdAt": "2026-09-06T03:02:56.294Z",
+  "initialFen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+  "fen": "8/6k1/q6p/4P3/pp2Q2N/8/1P4PP/2b4K w - - 3 37",
+  "moves": [
+    {
+      "ply": 1,
+      "seat": "white",
+      "uci": "e6f8",
+      "san": "Nxf8",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:56.582Z"
+    },
+    {
+      "ply": 2,
+      "seat": "black",
+      "uci": "g7g6",
+      "san": "g6",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:56.893Z"
+    },
+    {
+      "ply": 3,
+      "seat": "white",
+      "uci": "f8g6",
+      "san": "Nxg6+",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:57.239Z"
+    },
+    {
+      "ply": 4,
+      "seat": "black",
+      "uci": "h8g7",
+      "san": "Kg7",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:57.578Z"
+    },
+    {
+      "ply": 5,
+      "seat": "white",
+      "uci": "g6h4",
+      "san": "Nh4",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:57.933Z"
+    },
+    {
+      "ply": 6,
+      "seat": "black",
+      "uci": "a7a6",
+      "san": "Qa6",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:02:58.266Z"
+    }
+  ],
+  "players": {
+    "white": "engine",
+    "black": "engine"
+  },
+  "config": {
+    "maxPlies": 6,
+    "maxEngineCalls": 6,
+    "maxEngineConcurrency": 1,
+    "visibility": "blind"
+  },
+  "engineCalls": 6,
+  "engineInFlight": 0,
+  "engineAnalysis": {
+    "revision": 5,
+    "fen": "8/q5k1/7p/4P3/pp2Q2N/8/1P4PP/2b4K b - - 2 36",
+    "analysis": {
+      "schema": "chesslab-engine-analysis@1",
+      "requestId": "c6ba1736-4be0-45e4-8785-bba932c45fb9",
+      "position": {
+        "fen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+        "moves": [
+          "e6f8",
+          "g7g6",
+          "f8g6",
+          "h8g7",
+          "g6h4"
+        ],
+        "command": "position fen 5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34 moves e6f8 g7g6 f8g6 h8g7 g6h4"
+      },
+      "settings": {
+        "threads": 1,
+        "hashMb": 32,
+        "multiPv": 1,
+        "skillLevel": 8,
+        "limit": {
+          "kind": "nodes",
+          "value": 20000
+        },
+        "timeoutMs": 5000
+      },
+      "engine": {
+        "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "arguments": [
+          "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+        ],
+        "name": "Stockfish 18 Lite WASM",
+        "author": "the Stockfish developers (see AUTHORS file)",
+        "protocol": "uci"
+      },
+      "bestmove": "a7a6",
+      "ponder": "e4f5",
+      "variations": [
+        {
+          "multipv": 1,
+          "depth": 9,
+          "seldepth": 12,
+          "score": {
+            "kind": "cp",
+            "value": -43,
+            "bound": "lower"
+          },
+          "wdl": {
+            "win": 0,
+            "draw": 976,
+            "loss": 24
+          },
+          "nodes": 20001,
+          "nps": 588264,
+          "pv": [
+            "c1b2"
+          ]
+        }
+      ],
+      "startedAtMs": 1788663777939,
+      "completedAtMs": 1788663778260,
+      "durationMs": 321
+    },
+    "materialization": {
+      "materialization": {
+        "schema": "chesslab-engine-materialization@1",
+        "requestId": "c6ba1736-4be0-45e4-8785-bba932c45fb9",
+        "analysis": {
+          "schema": "chesslab-engine-analysis@1",
+          "requestId": "c6ba1736-4be0-45e4-8785-bba932c45fb9",
+          "position": {
+            "fen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+            "moves": [
+              "e6f8",
+              "g7g6",
+              "f8g6",
+              "h8g7",
+              "g6h4"
+            ],
+            "command": "position fen 5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34 moves e6f8 g7g6 f8g6 h8g7 g6h4"
+          },
+          "settings": {
+            "threads": 1,
+            "hashMb": 32,
+            "multiPv": 1,
+            "skillLevel": 8,
+            "limit": {
+              "kind": "nodes",
+              "value": 20000
+            },
+            "timeoutMs": 5000
+          },
+          "engine": {
+            "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "arguments": [
+              "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+            ],
+            "name": "Stockfish 18 Lite WASM",
+            "author": "the Stockfish developers (see AUTHORS file)",
+            "protocol": "uci"
+          },
+          "bestmove": "a7a6",
+          "ponder": "e4f5",
+          "variations": [
+            {
+              "multipv": 1,
+              "depth": 9,
+              "seldepth": 12,
+              "score": {
+                "kind": "cp",
+                "value": -43,
+                "bound": "lower"
+              },
+              "wdl": {
+                "win": 0,
+                "draw": 976,
+                "loss": 24
+              },
+              "nodes": 20001,
+              "nps": 588264,
+              "pv": [
+                "c1b2"
+              ]
+            }
+          ],
+          "startedAtMs": 1788663777939,
+          "completedAtMs": 1788663778260,
+          "durationMs": 321
+        }
+      },
+      "tick": {
+        "stage": "materialize",
+        "variant": "completed",
+        "operation": "chess.materializeEngineAnalysis",
+        "opId": "chess.materializeEngineAnalysis",
+        "frozenCalculations": [
+          {
+            "address": "fn.chess.materializeEngineAnalysis",
+            "implementationHash": "a74a3fa5ecd4aa6cfa3db2573296dedbe435f8a86d9a66eda4758b3cf588165f",
+            "identityScope": "runtime-function-body",
+            "limitation": "called helpers, constants, templates, and assets are not covered"
+          }
+        ],
+        "startedAtMs": 1788663778260,
+        "durationMs": 0,
+        "declaredConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "declaredProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "actualConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "actualProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "writes": [
+          {
+            "address": "px.chess.engine.analysis",
+            "kind": "new-address"
+          }
+        ],
+        "probes": [],
+        "artifacts": []
+      }
+    }
+  },
+  "result": {
+    "kind": "unfinished",
+    "reason": "ply-cap"
+  }
+}

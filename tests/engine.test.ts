@@ -9,12 +9,13 @@ const initialFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 test('bounded UCI request parses multipv score WDL PV and is materialized through a Tick', async () => {
   const analysis = await analyze(initialFen, ['e2e4', 'e7e5'], {
-    enginePath: process.execPath, engineArgs: [fixture], requestId: 'engine-test-1', nodes: 2_000, multiPv: 2, timeoutMs: 1_000
+    enginePath: process.execPath, engineArgs: [fixture], requestId: 'engine-test-1', nodes: 2_000, multiPv: 2, skillLevel: 7, timeoutMs: 1_000
   });
   assert.equal(analysis.schema, 'chesslab-engine-analysis@1');
   assert.equal(analysis.requestId, 'engine-test-1');
   assert.equal(analysis.position.command, `position fen ${initialFen} moves e2e4 e7e5`);
   assert.equal(analysis.settings.limit.kind, 'nodes');
+  assert.equal(analysis.settings.skillLevel, 7);
   assert.equal(analysis.bestmove, 'e2e4');
   assert.equal(analysis.engine.name, 'FixtureFish 0.1');
   assert.deepEqual(analysis.variations[0], {

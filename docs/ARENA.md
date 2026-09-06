@@ -34,6 +34,17 @@ both seats. It requires White checkmate, records every engine result and Tick,
 and fails rather than quietly substituting a mock engine. This verifies a known
 forced finish; it does not measure general strength against a strong opponent.
 
+Opponent skill is configurable with `engine-turn --skill 0..20`; the default is
+20. Skill is retained alongside the search budget in each engine analysis.
+`node scripts/arena-review.mjs MATCH_DIRECTORY` performs a separate bounded
+post-game review of at most six plies without altering player observations.
+
+The first [Terra XHigh ladder](../trials/2026-09-06/xhigh-ladder/README.md) found
+that filtering the visible candidates hid an already-computed mating reply.
+Full observations now expose immediate-mate risks independently of that filter.
+The [fresh-player repair probe](../trials/2026-09-06/xhigh-repair/README.md)
+avoided that mate but lost a queen, preserving a second concrete teaching case.
+
 ## Computational ownership
 
 - The rules adapter validates moves and reconstructs game history.

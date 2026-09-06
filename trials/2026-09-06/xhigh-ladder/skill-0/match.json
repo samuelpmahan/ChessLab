@@ -1,0 +1,217 @@
+{
+  "schema": "chesslab-arena@1",
+  "gameId": "xhigh-skill-0",
+  "revision": 3,
+  "createdAt": "2026-09-06T03:02:08.128Z",
+  "initialFen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+  "fen": "5N1k/q5pQ/7p/4P3/pp6/8/1b4PP/7K b - - 1 35",
+  "moves": [
+    {
+      "ply": 1,
+      "seat": "white",
+      "uci": "e6f8",
+      "san": "Nxf8",
+      "rationale": "Nxf8 removes Black’s rook with a knight that cannot be recaptured by the king, converting the tactical advantage while retaining the queen to restrain the dangerous passed pawns.",
+      "at": "2026-09-06T03:02:56.468Z"
+    },
+    {
+      "ply": 2,
+      "seat": "black",
+      "uci": "c1b2",
+      "san": "Bxb2",
+      "rationale": "Engine bestmove selection.",
+      "at": "2026-09-06T03:03:00.934Z"
+    },
+    {
+      "ply": 3,
+      "seat": "white",
+      "uci": "e4h7",
+      "san": "Qh7#",
+      "rationale": "Qh7 is mate: the queen checks adjacent to the king, while the knight on f8 protects h7 and seals the king’s capture; Black has no interposition or flight square.",
+      "at": "2026-09-06T03:03:14.483Z"
+    }
+  ],
+  "players": {
+    "white": "terra",
+    "black": "engine"
+  },
+  "config": {
+    "maxPlies": 6,
+    "maxEngineCalls": 3,
+    "maxEngineConcurrency": 1,
+    "visibility": "full"
+  },
+  "engineCalls": 1,
+  "engineInFlight": 0,
+  "engineAnalysis": {
+    "revision": 1,
+    "fen": "5N1k/q5p1/7p/4P3/pp2Q3/8/1P4PP/2b4K b - - 0 34",
+    "analysis": {
+      "schema": "chesslab-engine-analysis@1",
+      "requestId": "b22226f5-0dd5-4301-bb23-5e3df8530408",
+      "position": {
+        "fen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+        "moves": [
+          "e6f8"
+        ],
+        "command": "position fen 5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34 moves e6f8"
+      },
+      "settings": {
+        "threads": 1,
+        "hashMb": 32,
+        "multiPv": 1,
+        "skillLevel": 0,
+        "limit": {
+          "kind": "nodes",
+          "value": 20000
+        },
+        "timeoutMs": 5000
+      },
+      "engine": {
+        "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+        "arguments": [
+          "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+        ],
+        "name": "Stockfish 18 Lite WASM",
+        "author": "the Stockfish developers (see AUTHORS file)",
+        "protocol": "uci"
+      },
+      "bestmove": "c1b2",
+      "ponder": "e4h7",
+      "variations": [
+        {
+          "multipv": 1,
+          "depth": 9,
+          "seldepth": 14,
+          "score": {
+            "kind": "cp",
+            "value": 64,
+            "bound": "exact"
+          },
+          "wdl": {
+            "win": 89,
+            "draw": 911,
+            "loss": 0
+          },
+          "nodes": 20016,
+          "nps": 667200,
+          "pv": [
+            "h8g8",
+            "e4c4",
+            "g8f8"
+          ]
+        }
+      ],
+      "startedAtMs": 1788663780605,
+      "completedAtMs": 1788663780924,
+      "durationMs": 319
+    },
+    "materialization": {
+      "materialization": {
+        "schema": "chesslab-engine-materialization@1",
+        "requestId": "b22226f5-0dd5-4301-bb23-5e3df8530408",
+        "analysis": {
+          "schema": "chesslab-engine-analysis@1",
+          "requestId": "b22226f5-0dd5-4301-bb23-5e3df8530408",
+          "position": {
+            "fen": "5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34",
+            "moves": [
+              "e6f8"
+            ],
+            "command": "position fen 5r1k/q5p1/4N2p/4P3/pp2Q3/8/1P4PP/2b4K w - - 0 34 moves e6f8"
+          },
+          "settings": {
+            "threads": 1,
+            "hashMb": 32,
+            "multiPv": 1,
+            "skillLevel": 0,
+            "limit": {
+              "kind": "nodes",
+              "value": 20000
+            },
+            "timeoutMs": 5000
+          },
+          "engine": {
+            "command": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+            "arguments": [
+              "/workspace/scratch/84e23c136f96/ChessLab/.chesslab/engine/stockfish-18.0.8-lite-single/stockfish-18-lite-single.cjs"
+            ],
+            "name": "Stockfish 18 Lite WASM",
+            "author": "the Stockfish developers (see AUTHORS file)",
+            "protocol": "uci"
+          },
+          "bestmove": "c1b2",
+          "ponder": "e4h7",
+          "variations": [
+            {
+              "multipv": 1,
+              "depth": 9,
+              "seldepth": 14,
+              "score": {
+                "kind": "cp",
+                "value": 64,
+                "bound": "exact"
+              },
+              "wdl": {
+                "win": 89,
+                "draw": 911,
+                "loss": 0
+              },
+              "nodes": 20016,
+              "nps": 667200,
+              "pv": [
+                "h8g8",
+                "e4c4",
+                "g8f8"
+              ]
+            }
+          ],
+          "startedAtMs": 1788663780605,
+          "completedAtMs": 1788663780924,
+          "durationMs": 319
+        }
+      },
+      "tick": {
+        "stage": "materialize",
+        "variant": "completed",
+        "operation": "chess.materializeEngineAnalysis",
+        "opId": "chess.materializeEngineAnalysis",
+        "frozenCalculations": [
+          {
+            "address": "fn.chess.materializeEngineAnalysis",
+            "implementationHash": "a74a3fa5ecd4aa6cfa3db2573296dedbe435f8a86d9a66eda4758b3cf588165f",
+            "identityScope": "runtime-function-body",
+            "limitation": "called helpers, constants, templates, and assets are not covered"
+          }
+        ],
+        "startedAtMs": 1788663780927,
+        "durationMs": 1,
+        "declaredConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "declaredProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "actualConsumes": [
+          "px.chess.engine.completed"
+        ],
+        "actualProduces": [
+          "px.chess.engine.analysis"
+        ],
+        "writes": [
+          {
+            "address": "px.chess.engine.analysis",
+            "kind": "new-address"
+          }
+        ],
+        "probes": [],
+        "artifacts": []
+      }
+    }
+  },
+  "result": {
+    "kind": "win",
+    "reason": "checkmate",
+    "winner": "white"
+  }
+}

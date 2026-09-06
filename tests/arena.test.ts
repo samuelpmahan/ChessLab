@@ -39,3 +39,16 @@ test('full observations materialize a tracked tactical mind while blind stays wh
  const blind=temp();createMatch(blind,{gameId:'blind',visibility:'blind'});const limited=observe(blind,'white') as Record<string,unknown>;
  assert.deepEqual(Object.keys(limited),['schema','gameId','revision','youAre','fen','sideToMove','legalMoves','history','gameOver']);
 });
+
+test('the XHigh Qe7 failure exposes its mating reply even outside the top five',()=>{
+ const directory=temp();createMatch(directory,{gameId:'xhigh-regression',visibility:'full',
+  fen:'5Nk1/6p1/q6p/4P3/pQ6/8/1P4PP/2b4K w - - 1 36'});
+ const view=observe(directory,'white') as any;
+ assert.equal(view.mind.summary.candidates.some((move:any)=>move.id==='b4e7'),false);
+ const alert=view.mind.summary.immediateMateRisks.find((risk:any)=>risk.move==='b4e7');
+ assert.ok(alert.replies.some((reply:any)=>reply.move==='a6f1'));
+ assert.ok(view.mind.summary.constraintEvaluations.some((evaluation:any)=>evaluation.status==='violated'&&evaluation.reason.includes('b4e7')));
+ submit(directory,{gameId:'xhigh-regression',revision:0,seat:'white',move:'b4e7',rationale:'Replay the observed failure.'});
+ submit(directory,{gameId:'xhigh-regression',revision:1,seat:'black',move:'a6f1',rationale:'Verify the exact predicted mating reply.'});
+ assert.deepEqual(status(directory).result,{kind:'win',reason:'checkmate',winner:'black'});
+});
