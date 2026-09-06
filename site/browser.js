@@ -1,10 +1,10 @@
-import {loadCartridge} from './src/lab/host.js';
-import {chessCartridge} from './src/chess/cartridge.js';
-import {gameReplay,replayView} from './src/replayView.js';
+import {loadCartridge} from './src/lab/host.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
+import {chessCartridge} from './src/chess/cartridge.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
+import {gameReplay,replayView} from './src/replayView.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
 const replay=gameReplay();let replayMode=true;
-import {DebugMaterializer} from './src/lab/debugMaterializer.js';
-import {boardView,whyView} from './src/views.js';
-import {Board,session,specimen} from './src/state.js';
+import {DebugMaterializer} from './src/lab/debugMaterializer.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
+import {boardView,whyView} from './src/views.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
+import {Board,session,specimen} from './src/state.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
 const lab=session(),output=document.querySelector('#output'),input=document.querySelector('#command');
 const print=s=>{output.textContent+=(output.textContent?'\n':'')+s;output.scrollTop=output.scrollHeight;};
 function render(){

@@ -1,5 +1,5 @@
                                                   
-import {pxFn} from '../../../../lab/board.js';
+import {pxFn} from '../../../../lab/board.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
 const names={K:'King',Q:'Queen',R:'Rook',B:'Bishop',N:'Knight',P:'Pawn'}         ;
                                                                                            
 function materialize(frame      ){

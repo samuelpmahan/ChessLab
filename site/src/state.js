@@ -1,5 +1,5 @@
-import {createExecBoard, pxFn, pxKey, trackAccess} from './lab/board.js';
-import {sha256HexSyncText} from './lab/sha256.js';
+import {createExecBoard, pxFn, pxKey, trackAccess} from './lab/board.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
+import {sha256HexSyncText} from './lab/sha256.js?v=fa516eb9d427ea75fc05aa6f334df34cf6754f748ecfd6fc971f7e4d4b38d78f';
                                     
                                                                               
 export const King=(id       ,color      ,square       )      =>({id,type:'King',color,square});
